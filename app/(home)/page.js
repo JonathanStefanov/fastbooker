@@ -17,6 +17,7 @@ export  default async function Home() {
         {floors.map((floor) => (
           <div className='m-2'>
             <FloorTile
+              key={floor.resource_type}
               name={floor.localized_description}
               image={floor.image}
               id={floor.resource_type}

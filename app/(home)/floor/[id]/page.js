@@ -50,8 +50,9 @@ export default function Floor({ params }) {
         {seats &&
           seats
             .filter((seat) => seat.resource_name.toLowerCase().includes(search.toLowerCase()) || seat.description.toLowerCase().includes(search.toLowerCase()))
-            .map((seat) => (
+            .map((seat, i) => (
               <SeatTile
+                key={i}
                 name={seat.resource_name}
                 description={seat.description}
                 date={selectedDate}
