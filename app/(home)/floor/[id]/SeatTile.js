@@ -21,19 +21,18 @@ export default function SeatTile({name, description, hours, id, email, date}) {
 
   const handleBookAll = () => {
     const slots = findBestBookingPlan(hours);
-    console.log(slots);
-    slots.forEach((slot) => {
-      reserve(email, date, slot[0], slot[1], id).then((res) => {
-        console.log(res);
-      
-        setIsError(res[0] === 0);
-        setMessage(res[1] + " " + email);
-        setHasSubmitted(true);
-      });
-      console.log('booked ' + slot[0] + ' to ' + slot[1])
+    slots.forEach((slot, index) => {
+      setTimeout(() => {
+        reserve(email, date, slot[0], slot[1], id).then((res) => {
+          console.log(res);
+          setIsError(res[0] === 0);
+          setMessage(res[1]);
+          setHasSubmitted(true);
+        });
+      }, index * 1000);
     });
-
-  }
+  };
+  
   return (
     <div className='seat-tile-box'>
         <p className='text-2xl border-2 border-gray-800'>{name}</p>
