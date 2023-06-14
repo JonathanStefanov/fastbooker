@@ -1,9 +1,7 @@
-import Image from 'next/image'
-import EmailInput from '@/components/EmailInput'
-import getBSHFloors from '@/lib/getBSHFloors';
-import FloorTile from '@/components/FloorTile';
+import getLibraries from '@/lib/getLibraries';
+import LibraryTile from './libraryTile';
 export  default async function Home() {
-  const floors = await getBSHFloors();
+  const libraries = await getLibraries();
   return (
     <main>
       <center>
@@ -14,13 +12,17 @@ export  default async function Home() {
         </div>
       </center>
       <div className='flex flex-wrap justify-center'>
-        {floors.map((floor, i) => (
+        {libraries.map((floor, i) => (
+          
           <div className='m-2'key={i} >
-            <FloorTile
-              name={floor.localized_description}
-              image={floor.image}
-              id={floor.resource_type}
+            {floor.booking_available && (
+                          <LibraryTile
+              name={floor.primary_name}
+              image={floor.poster_image}
+              id={floor.id}
             />
+            )}
+
           </div>
             ))}
       </div>
