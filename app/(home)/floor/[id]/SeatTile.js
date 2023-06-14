@@ -27,7 +27,7 @@ export default function SeatTile({name, description, hours, id, email, date}) {
         console.log(res);
       
         setIsError(res[0] === 0);
-        setMessage(res[1]);
+        setMessage(res[1] + " " + email);
         setHasSubmitted(true);
       });
       console.log('booked ' + slot[0] + ' to ' + slot[1])
