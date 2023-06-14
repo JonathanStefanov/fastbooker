@@ -53,6 +53,7 @@ export default function Floor({ params }) {
             .map((seat, i) => (
               <div key={i}>
               <SeatTile
+                id={seat.resource_id}
                 name={seat.resource_name}
                 description={seat.description}
                 date={selectedDate}

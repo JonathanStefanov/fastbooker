@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from 'react';
+import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import Card from '@mui/material/Card';
@@ -14,11 +15,21 @@ import "./SeatTile.css";
 import Hour from './Hour';
 
 export default function SeatTile({name, description, hours, id, email, date}) {
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [message, setMessage] = useState('');
+
   const handleBookAll = () => {
     const slots = findBestBookingPlan(hours);
     console.log(slots);
     slots.forEach((slot) => {
-      reserve(email, date, slot[0], slot[1], id);
+      reserve(email, date, slot[0], slot[1], id).then((res) => {
+        console.log(res);
+      
+        setIsError(res[0] === 0);
+        setMessage(res[1]);
+        setHasSubmitted(true);
+      });
       console.log('booked ' + slot[0] + ' to ' + slot[1])
     });
 
@@ -41,7 +52,9 @@ export default function SeatTile({name, description, hours, id, email, date}) {
             Book All Available
           </Button>
         </div>
-        <Alert severity="error">This is an error alert — check it out!</Alert>
+        {hasSubmitted && (
+          <Alert severity={isError ? 'error' : 'success'} className='rounded-2 mt-3'>{message}</Alert>
+        )}
 
 
     </div>
