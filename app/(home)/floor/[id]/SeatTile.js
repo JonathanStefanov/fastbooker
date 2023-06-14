@@ -30,8 +30,8 @@ export default function SeatTile({name, description, hours, id, email, date}) {
         <div className='flex flex-wrap'>
           {hours.map((hour, i) => (
             hour.places_available > 0 ? (
-              <div className='flex flex-wrap m-1'>
-                <Hour hour={hour} key={i}/>
+              <div className='flex flex-wrap m-1' key={i}>
+                <Hour hour={hour}/>
               </div>
             ) : null
           ))}
