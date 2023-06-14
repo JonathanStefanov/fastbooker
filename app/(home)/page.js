@@ -1,5 +1,5 @@
 import getLibraries from '@/lib/getLibraries';
-import LibraryTile from './libraryTile';
+import LibraryTile from './LibraryTile';
 export  default async function Home() {
   const libraries = await getLibraries();
   return (
