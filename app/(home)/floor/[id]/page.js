@@ -3,12 +3,14 @@
 import { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import getSeats from '@/lib/getSeats';
+import CircularProgress from '@mui/material/CircularProgress';
 import { formatDate } from '@/lib/utils';
 import DateSelector from './DateSelector';
 import SeatTile from './SeatTile';
 
 export default function Floor({ params }) {
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
+
   const [seats, setSeats] = useState(null);
   const [email, setEmail] = useState('');
   const [search, setSearch] = useState('');
@@ -22,6 +24,7 @@ export default function Floor({ params }) {
   }, [params.id, selectedDate]);
 
   const handleDateChange = (date) => {
+    setSeats(null);
     setSelectedDate(date);
   };
 
@@ -47,7 +50,7 @@ export default function Floor({ params }) {
             <TextField id="outlined-basic" label="Search" variant="outlined" className="m-3" value={search} onChange={handleSearchChange} />
           </div>
         </div>
-        {seats &&
+        {seats ? (
           seats
             .filter((seat) => seat.resource_name.toLowerCase().includes(search.toLowerCase()) || seat.description.toLowerCase().includes(search.toLowerCase()))
             .map((seat, i) => (
@@ -61,7 +64,12 @@ export default function Floor({ params }) {
                 email={email}
               />
               </div>
-            ))}
+            )))
+            :
+            <div className='mt-4'>
+              <CircularProgress />
+            </div>
+          }
       </center>
     </div>
   );
