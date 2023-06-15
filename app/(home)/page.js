@@ -11,6 +11,7 @@ export  default async function Home() {
         </div>
         </div>
       </center>
+      <center>
       <div className='flex flex-wrap justify-center'>
         {libraries.map((floor, i) => (
           
@@ -26,6 +27,7 @@ export  default async function Home() {
           </div>
             ))}
       </div>
+      </center>
 
 
     </main>

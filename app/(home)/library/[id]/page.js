@@ -4,7 +4,7 @@ import getBSHFloors from '@/lib/getFloors';
 import FloorTile from '@/components/FloorTile';
 import getFloors from '@/lib/getFloors';
 export  default async function Home({params}) {
-  const floors = await getFloors('8e938621-0918-4a4b-89c2-71e879fb341c');
+  const floors = await getFloors(params.id);
   return (
     <main>
       <center>
