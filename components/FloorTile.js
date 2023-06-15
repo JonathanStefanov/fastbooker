@@ -20,6 +20,7 @@ export default function FloorTile({ name, image, id, libraryId}) {
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             {name}
+            
           </Typography>
         </CardContent>
       </CardActionArea>

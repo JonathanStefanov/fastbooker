@@ -14,7 +14,7 @@ export  default async function Home({params}) {
         </div>
         </div>
       </center>
-      <div className='flex justify-center'>
+      <div className='flex flex-wrap justify-center'>
         {floors.map((floor, i) => (
           <div className='m-2'key={i} >
             <FloorTile
