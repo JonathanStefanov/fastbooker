@@ -9,8 +9,8 @@ import { Button, CardActionArea, CardActions } from '@mui/material';
 
 export default function LibraryTile({ name, image, id}) {
   return (
-    <div className='w-[500px]'>
-    <Card sx={{ maxWidth: 345, minWidth: 345 }}>
+    <div className='w-[300px]'>
+    <Card sx={{ maxWidth: 345 }}>
       <CardActionArea>
         <CardMedia
           component="img"

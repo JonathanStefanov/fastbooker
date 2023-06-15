@@ -16,7 +16,7 @@ export default function Floor({ params }) {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    getSeats(params.id, selectedDate).then((data) => {
+    getSeats(params.id, params.floorId, selectedDate).then((data) => {
       const allSeats = data.flat(1);
       setSeats(allSeats);
       console.log(allSeats);

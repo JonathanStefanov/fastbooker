@@ -7,7 +7,10 @@ export default function UNavbar() {
   return (
     <AppBar style={{position: 'relative'}}>
       <Toolbar>
-        <Typography variant="h6"><p>Affluences Fast Booker</p></Typography>
+        <Typography variant="h6">
+          
+          <p>Affluences Fast Booker</p>
+          </Typography>
       </Toolbar>
     </AppBar>
   );

@@ -7,7 +7,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 
-export default function FloorTile({ name, image, id}) {
+export default function FloorTile({ name, image, id, libraryId}) {
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardActionArea>
@@ -24,7 +24,7 @@ export default function FloorTile({ name, image, id}) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary" href={"/floor/" + id}>
+        <Button size="small" color="primary" href={"/library/" + libraryId + "/floor/" + id}>
           Select
         </Button>
       </CardActions>
