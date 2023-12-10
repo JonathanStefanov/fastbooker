@@ -1,8 +1,27 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🚀 FastBooker - University Library Seat Booking Simplified
+
+## Background
+
+FastBooker is a custom solution to improve the seat booking experience in our university library. It was created after reverse-engineering the Affluences API, allowing for a deeper understanding of its functionalities and limitations. This knowledge was instrumental in developing an application that not only resolves the issues of the Affluences system but also enhances the overall user experience.
+
+## Problem with the Current Affluences System
+
+The Affluences app, currently used for booking library seats, presents several challenges:
+- **Inefficient Booking Workflow**: Requires booking each 2-hour slot separately for the full day, redirecting to the home page after each booking.
+- **No Seat Number Search**: Lacks the ability to search for seats by their number, leading to a time-consuming process.
+
+## FastBooker Solution
+
+Utilizing insights from the reverse-engineered Affluences API, FastBooker offers a streamlined and user-friendly booking process. Key features include:
+- 📅 **Intuitive Date Selection**: Select dates easily (Today, Tomorrow, Day After Tomorrow) without complex calendar navigation.
+- 🔍 **Seat Number Search**: Quickly locate and book seats by their numbers.
+- 🕒 **Whole Day Booking**: Book seats for the entire day effortlessly, an essential feature for exam preparations.
 
 ## Getting Started
 
-First, run the development server:
+This project is built with [Next.js](https://nextjs.org/), initiated using [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+### Running the Development Server
 
 ```bash
 npm run dev
@@ -10,25 +29,5 @@ npm run dev
 yarn dev
 # or
 pnpm dev
+
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
