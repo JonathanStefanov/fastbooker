@@ -2,24 +2,26 @@
 
 ## Background
 
-FastBooker is a custom solution to improve the seat booking experience in our university library. It was created after reverse-engineering the Affluences API, allowing for a deeper understanding of its functionalities and limitations. This knowledge was instrumental in developing an application that not only resolves the issues of the Affluences system but also enhances the overall user experience.
+FastBooker is a custom solution designed to enhance the seat booking experience in university libraries. Developed after reverse-engineering the Affluences API, this project aims to address and improve upon the limitations of the existing system.
 
 ## Problem with the Current Affluences System
 
-The Affluences app, currently used for booking library seats, presents several challenges:
-- **Inefficient Booking Workflow**: Requires booking each 2-hour slot separately for the full day, redirecting to the home page after each booking.
-- **No Seat Number Search**: Lacks the ability to search for seats by their number, leading to a time-consuming process.
+The Affluences app, used for booking library seats, has several issues:
+- **Inefficient Booking Workflow**: It requires booking each 2-hour slot separately for a full day, with a redirection to the home page after each booking.
+- **Lack of Seat Number Search**: There's no functionality to search for seats by their numbers, leading to a tedious scrolling process.
 
 ## FastBooker Solution
 
-Utilizing insights from the reverse-engineered Affluences API, FastBooker offers a streamlined and user-friendly booking process. Key features include:
-- 📅 **Intuitive Date Selection**: Select dates easily (Today, Tomorrow, Day After Tomorrow) without complex calendar navigation.
-- 🔍 **Seat Number Search**: Quickly locate and book seats by their numbers.
-- 🕒 **Whole Day Booking**: Book seats for the entire day effortlessly, an essential feature for exam preparations.
+Leveraging the insights from reverse-engineering the Affluences API, FastBooker offers an intuitive and efficient seat booking process. Key features include:
+- 📅 **Intuitive Date Selection**: Easily choose dates (Today, Tomorrow, Day After Tomorrow) without the hassle of a complex calendar.
+- 🔍 **Seat Number Search**: Find and book seats quickly by their numbers.
+- 🕒 **Whole Day Booking**: Conveniently book seats for the entire day, a crucial feature during exam times.
+
+Visit the app here: [FastBooker](https://fastbooker.vercel.app/)
 
 ## Getting Started
 
-This project is built with [Next.js](https://nextjs.org/), initiated using [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This project is built with [Next.js](https://nextjs.org/), started with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ### Running the Development Server
 
@@ -29,5 +31,3 @@ npm run dev
 yarn dev
 # or
 pnpm dev
-
-```
