@@ -38,6 +38,7 @@ export default function Home() {
   const { data: libraries, isLoading, isError } = useQuery({
     queryKey: ['libraries', universityId],
     queryFn: () => fetchLibraries(universityId),
+    staleTime: 2 * 60 * 1000, // 2min — library list rarely changes
   });
 
   return (
