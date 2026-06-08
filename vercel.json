@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "app/api/libraries/route.js": {
+      "runtime": "nodejs24.x"
+    }
+  }
+}
