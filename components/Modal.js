@@ -1,50 +1,32 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Modal({ open, onClose, children, maxWidth = '480px' }) {
-  const [visible, setVisible] = useState(false);
-  const [animating, setAnimating] = useState(false);
-
-  useEffect(() => {
-    if (open) {
-      setVisible(true);
-      // Double rAF ensures browser paints the initial state (scale 0.9, opacity 0)
-      // before transitioning to the final state — this makes fade-in visible
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => setAnimating(true));
-      });
-    } else if (visible) {
-      setAnimating(false);
-      const timer = setTimeout(() => setVisible(false), 200);
-      return () => clearTimeout(timer);
-    }
-  }, [open, visible]);
-
-  if (!visible) return null;
-
   return (
-    <div
-      className="fixed inset-0 flex items-center justify-center z-50 p-4"
-      onClick={onClose}
-      style={{
-        backgroundColor: animating ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0)',
-        transition: 'background-color 200ms ease',
-      }}
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-2xl shadow-2xl overflow-hidden"
-        style={{
-          maxWidth,
-          width: '100%',
-          transform: animating ? 'scale(1) translateY(0)' : 'scale(0.9) translateY(16px)',
-          opacity: animating ? 1 : 0,
-          transition: 'transform 200ms cubic-bezier(0.16, 1, 0.3, 1), opacity 150ms ease',
-        }}
-      >
-        {children}
-      </div>
-    </div>
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          className="fixed inset-0 flex items-center justify-center z-50 p-4"
+          onClick={onClose}
+          initial={{ backgroundColor: 'rgba(0,0,0,0)' }}
+          animate={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+          exit={{ backgroundColor: 'rgba(0,0,0,0)' }}
+          transition={{ duration: 0.2 }}
+        >
+          <motion.div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-2xl shadow-2xl overflow-hidden"
+            style={{ maxWidth, width: '100%' }}
+            initial={{ scale: 0.85, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.9, opacity: 0, y: 16 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+          >
+            {children}
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

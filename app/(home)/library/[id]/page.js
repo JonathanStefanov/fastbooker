@@ -2,7 +2,7 @@ import getFloors from '@/lib/getFloors';
 import ViewAllSeatsButton from './ViewAllSeatsButton';
 import RoomList from './RoomList';
 
-export  default async function Home({params}) {
+export default async function Home({params}) {
   const floors = await getFloors(params.id);
   return (
     <main className="py-8 px-4">
@@ -17,5 +17,5 @@ export  default async function Home({params}) {
       </div>
       <RoomList floors={floors} libraryId={params.id} />
     </main>
-  )
+  );
 }

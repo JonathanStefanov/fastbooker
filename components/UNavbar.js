@@ -3,6 +3,7 @@ import { IoIosArrowBack } from 'react-icons/io';
 import { HiOutlineHome } from 'react-icons/hi';
 import { FiMail } from 'react-icons/fi';
 import React from 'react';
+import { motion } from 'framer-motion';
 import { AppBar, Toolbar, Typography, Box } from '@mui/material';
 import { Quicksand } from 'next/font/google'
 import { twMerge } from 'tailwind-merge'
@@ -16,6 +17,11 @@ export default function UNavbar() {
   const { email, openEmailModal } = useEmail();
 
   return (
+    <motion.div
+      initial={{ y: -60, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+    >
     <AppBar style={{
       position: 'relative',
       background: university.colors.gradient,
@@ -64,5 +70,6 @@ export default function UNavbar() {
         </button>
       </Toolbar>
     </AppBar>
+    </motion.div>
   );
 }

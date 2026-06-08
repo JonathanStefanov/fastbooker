@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { motion, AnimatePresence } from 'framer-motion';
 import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -110,19 +111,32 @@ export default function AllSeats({ params }) {
           {isLoading ? (
             <div className="mt-8"><CircularProgress /></div>
           ) : filteredAndSortedSeats.length > 0 ? (
-            <List sx={{ width: '100%', maxWidth: '900px', p: 0 }}>
-              {filteredAndSortedSeats.map((seat, i) => (
-                <SeatTile
-                  key={i}
-                  id={seat.resource_id}
-                  name={seat.resource_name}
-                  description={`${seat.floor_name} - ${seat.description}`}
-                  date={selectedDate}
-                  hours={seat.hours}
-
-                />
-              ))}
-            </List>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              <List sx={{ width: '100%', maxWidth: '900px', p: 0 }}>
+                <AnimatePresence>
+                  {filteredAndSortedSeats.map((seat, i) => (
+                    <motion.div
+                      key={`${seat.resource_id}-${selectedDate}`}
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: Math.min(i * 0.04, 0.4), type: 'spring', stiffness: 300, damping: 24 }}
+                    >
+                      <SeatTile
+                        id={seat.resource_id}
+                        name={seat.resource_name}
+                        description={`${seat.floor_name} - ${seat.description}`}
+                        date={selectedDate}
+                        hours={seat.hours}
+                      />
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </List>
+            </motion.div>
           ) : (
             <Box sx={{ textAlign: 'center', py: 4 }}>
               <Typography variant="h6" sx={{ color: '#6b7280' }}>No seats found matching your criteria.</Typography>

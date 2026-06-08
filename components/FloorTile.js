@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from 'react';
+import { motion } from 'framer-motion';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
@@ -8,7 +9,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
-export default function FloorTile({ name, image, id, libraryId}) {
+export default function FloorTile({ name, image, id, libraryId }) {
   return (
     <ListItem
       disablePadding
@@ -21,13 +22,14 @@ export default function FloorTile({ name, image, id, libraryId}) {
     >
       <ListItemButton
         href={"/library/" + libraryId + "/floor/" + id}
+        component={motion.a}
+        whileHover={{ x: 4, backgroundColor: '#f3f4f6' }}
+        whileTap={{ scale: 0.99 }}
+        transition={{ type: 'spring', stiffness: 400, damping: 25 }}
         sx={{
           py: 2,
           px: 3,
-          transition: 'all 0.2s ease',
-          '&:hover': {
-            backgroundColor: '#f3f4f6',
-          }
+          display: 'flex',
         }}
       >
         <ListItemAvatar>
@@ -50,7 +52,13 @@ export default function FloorTile({ name, image, id, libraryId}) {
             color: '#1f2937'
           }}
         />
-        <ChevronRightIcon sx={{ color: '#9ca3af' }} />
+        <motion.div
+          animate={{ x: 0 }}
+          whileHover={{ x: 3 }}
+          transition={{ duration: 0.15 }}
+        >
+          <ChevronRightIcon sx={{ color: '#9ca3af' }} />
+        </motion.div>
       </ListItemButton>
     </ListItem>
   );

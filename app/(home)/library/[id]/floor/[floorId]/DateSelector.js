@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { formatDate } from '@/lib/utils';
 import { useUniversity } from '@/components/UniversityContext';
 import Box from '@mui/material/Box';
@@ -65,8 +66,14 @@ export default function DateSelector({ onDateChange }) {
         {days.map((day, index) => {
           const isSelected = selectedDate === day.formattedDate;
           return (
-            <ButtonBase
+            <motion.div
               key={index}
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.95 }}
+              animate={isSelected ? { scale: [1, 1.15, 1] } : {}}
+              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+            >
+            <ButtonBase
               onClick={() => handleDateClick(day.formattedDate)}
               sx={{
                 display: 'flex',
@@ -82,7 +89,6 @@ export default function DateSelector({ onDateChange }) {
                 transition: 'all 0.2s ease',
                 '&:hover': {
                   backgroundColor: isSelected ? university.colors.hoverDate : '#f3f4f6',
-                  transform: 'scale(1.05)',
                   borderColor: isSelected ? university.colors.hoverDate : '#d1d5db',
                 }
               }}
@@ -120,6 +126,7 @@ export default function DateSelector({ onDateChange }) {
                 />
               )}
             </ButtonBase>
+            </motion.div>
           );
         })}
       </Box>
