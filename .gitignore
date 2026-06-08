@@ -35,3 +35,8 @@ yarn-error.log*
 next-env.d.ts
 
 .ideascreenshot.js
+-e 
+# Dev tools
+screenshot.js
+uni-screenshot.js
+.local/
