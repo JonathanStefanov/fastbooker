@@ -9,7 +9,11 @@ export default function Modal({ open, onClose, children, maxWidth = '480px' }) {
   useEffect(() => {
     if (open) {
       setVisible(true);
-      requestAnimationFrame(() => setAnimating(true));
+      // Double rAF ensures browser paints the initial state (scale 0.9, opacity 0)
+      // before transitioning to the final state — this makes fade-in visible
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => setAnimating(true));
+      });
     } else if (visible) {
       setAnimating(false);
       const timer = setTimeout(() => setVisible(false), 200);
