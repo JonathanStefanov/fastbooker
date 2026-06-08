@@ -5,11 +5,13 @@ import React, { useState, useEffect } from 'react';
 import { AppBar, Toolbar, Typography, TextField, Box } from '@mui/material';
 import { Quicksand } from 'next/font/google'
 import { twMerge } from 'tailwind-merge'
+import { useUniversity } from './UniversityContext';
 
 const font = Quicksand({ subsets: ['latin'], weight: ['400', '600'] })
 
 export default function UNavbar() {
   const [email, setEmail] = useState('');
+  const { university } = useUniversity();
 
   // Load email from localStorage on mount
   useEffect(() => {
@@ -32,7 +34,7 @@ export default function UNavbar() {
   return (
     <AppBar style={{
       position: 'relative', 
-      background: 'linear-gradient(135deg, #991b1b 0%, #b91c1c 100%)',
+      background: university.colors.gradient,
       boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)'
     }}>
       <Toolbar sx={{ justifyContent: 'space-between' }}>
@@ -50,8 +52,11 @@ export default function UNavbar() {
           <div className='mx-4'>
             <Typography variant="h6">
               <div className='flex items-center'>
-                <div className='bg-white text-red-800 px-3 py-1.5 rounded-lg font-bold mr-3 shadow-md'>
-                  UniPD
+                <div
+                  className='px-3 py-1.5 rounded-lg font-bold mr-3 shadow-md text-white'
+                  style={{ backgroundColor: university.colors.primary }}
+                >
+                  {university.shortName}
                 </div>
                 <p className={twMerge(font.className, 'font-semibold text-lg')}>Fast Booker</p>
               </div>
@@ -62,11 +67,12 @@ export default function UNavbar() {
         {/* Email input on the right */}
         <Box sx={{ display: { xs: 'none', md: 'block' } }}>
           <TextField
-            label="UniPD Email"
+            label={`${university.shortName} Email`}
             variant="outlined"
             size="small"
             value={email}
             onChange={handleEmailChange}
+            placeholder={`@${university.emailDomain}`}
             sx={{
               backgroundColor: 'white',
               borderRadius: '8px',

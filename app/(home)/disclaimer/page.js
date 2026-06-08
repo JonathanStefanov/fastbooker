@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Legal Disclaimer - UniPD Fast Booker',
+  title: 'Legal Disclaimer - FastBooker',
   description: 'Legal disclaimer and terms of use for FastBooker',
 };
 
@@ -81,7 +81,7 @@ export default function DisclaimerPage() {
           <p className="text-gray-700">
             <strong>For Affluences Representatives:</strong> If you have concerns about this project, 
             please contact the repository owner through{' '}
-            <a href="https://github.com/oppermax/fastbooker/issues" className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/JonathanStefanov/fastbooker/issues" className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">
               GitHub issues
             </a>. We will respond promptly and cooperatively.
           </p>

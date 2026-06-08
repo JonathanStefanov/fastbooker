@@ -14,6 +14,17 @@
 
 FastBooker is a custom solution designed to enhance the seat booking experience in university libraries. Developed after reverse-engineering the Affluences API, this project aims to address and improve upon the limitations of the existing system.
 
+## Multi-University Support
+
+FastBooker supports multiple universities! Currently configured:
+
+| University | Short Name | Email Domain |
+|---|---|---|
+| Université Libre de Bruxelles | ULB | `ulb.be` |
+| Università degli Studi di Padova | UniPD | `unipd.it` |
+
+Adding a new university is as simple as adding an entry to `lib/universities.js` with the search query, email domain, and brand colors.
+
 ## Problem with the Current Affluences System
 
 The Affluences app, used for booking library seats, has several issues:
@@ -23,14 +34,14 @@ The Affluences app, used for booking library seats, has several issues:
 ## FastBooker Solution
 
 Leveraging the insights from reverse-engineering the Affluences API, FastBooker offers an intuitive and efficient seat booking process. Key features include:
-- 📅 **Intuitive Date Selection**: Easily choose dates (Today, Tomorrow, Day After Tomorrow) without the hassle of a complex calendar.
-- 🔍 **Seat Number Search**: Find and book seats quickly by their numbers.
-- 🕒 **Whole Day Booking**: Conveniently book seats for the entire day, a crucial feature during exam times.
-- 👁️ **View All Seats**: See all available seats across all rooms in a single view, especially useful when libraries are heavily booked.
+- 🏫 **Multi-University**: Switch between universities from the home page
+- 📅 **Intuitive Date Selection**: Easily choose dates (today + next 6 days) with a clean circular picker
+- 🔍 **Seat Number Search**: Find and book seats quickly by their numbers
+- 🕒 **Whole Day Booking**: Conveniently book seats for the entire day, a crucial feature during exam times
+- 👁️ **View All Seats**: See all available seats across all rooms in a single view, especially useful when libraries are heavily booked
+- 📊 **Occupancy & Status**: See library open/closed status, occupancy percentage, and seat counts at a glance
 
 Visit the app here: [FastBooker](https://fastbooker.vercel.app/)
-<img width="1440" alt="Capture d’écran 2023-12-10 à 13 14 12" src="https://github.com/JonathanStefanov/fastbooker/assets/38321403/a5d30338-5a6a-4aa4-8b1f-a8d9964de29c">
-
 
 ## Getting Started
 
@@ -44,6 +55,7 @@ npm run dev
 yarn dev
 # or
 pnpm dev
+```
 
 ## ⚠️ Legal & Ethical Considerations
 
@@ -62,4 +74,3 @@ If you represent Affluences and have concerns, please open an issue. We will res
 ## License
 
 MIT License with disclaimer - see [LICENSE](LICENSE) file for details.
-

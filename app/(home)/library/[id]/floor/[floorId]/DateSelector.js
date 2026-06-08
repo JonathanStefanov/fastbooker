@@ -2,12 +2,14 @@
 
 import { useState } from 'react';
 import { formatDate } from '@/lib/utils';
+import { useUniversity } from '@/components/UniversityContext';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import ButtonBase from '@mui/material/ButtonBase';
 
 export default function DateSelector({ onDateChange }) {
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
+  const { university } = useUniversity();
 
   // Generate next 7 days starting from today
   const getNext7Days = () => {
@@ -74,14 +76,14 @@ export default function DateSelector({ onDateChange }) {
                 width: 64,
                 height: 64,
                 borderRadius: '50%',
-                backgroundColor: isSelected ? '#991b1b' : '#ffffff',
+                backgroundColor: isSelected ? university.colors.primary : '#ffffff',
                 color: isSelected ? '#ffffff' : '#1f2937',
-                border: isSelected ? '2px solid #991b1b' : '2px solid #e5e7eb',
+                border: isSelected ? `2px solid ${university.colors.primary}` : '2px solid #e5e7eb',
                 transition: 'all 0.2s ease',
                 '&:hover': {
-                  backgroundColor: isSelected ? '#7f1d1d' : '#f3f4f6',
+                  backgroundColor: isSelected ? university.colors.hoverDate : '#f3f4f6',
                   transform: 'scale(1.05)',
-                  borderColor: isSelected ? '#7f1d1d' : '#d1d5db',
+                  borderColor: isSelected ? university.colors.hoverDate : '#d1d5db',
                 }
               }}
             >
@@ -113,7 +115,7 @@ export default function DateSelector({ onDateChange }) {
                     width: 4,
                     height: 4,
                     borderRadius: '50%',
-                    backgroundColor: isSelected ? '#ffffff' : '#991b1b',
+                    backgroundColor: isSelected ? '#ffffff' : university.colors.primary,
                   }}
                 />
               )}

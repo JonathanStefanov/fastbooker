@@ -12,7 +12,7 @@ export default function Footer() {
               Full Legal Disclaimer
             </a>
             <a 
-              href="https://github.com/oppermax/fastbooker" 
+              href="https://github.com/JonathanStefanov/fastbooker" 
               target="_blank" 
               rel="noopener noreferrer"
               className="underline hover:text-gray-900 mr-4"
