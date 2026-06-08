@@ -15,49 +15,58 @@ import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import Hour from './Hour';
+import TimeSlotBar from './TimeSlotBar';
 
 export default function SeatTile({name, description, hours, id, date}) {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [isError, setIsError] = useState(false);
   const [message, setMessage] = useState('');
   const [expanded, setExpanded] = useState(false);
+  const [selectedRange, setSelectedRange] = useState(null);
+  const [booking, setBooking] = useState(false);
   const { email, requireEmail } = useEmail();
 
   const availableHours = hours.filter(hour => hour.places_available > 0);
   const hasAvailableSlots = availableHours.length > 0;
 
-  const handleBookSlot = (hour) => {
-    if (!requireEmail()) return;
-    // Calculate end time (30 minutes after start time)
-    const startTime = hour.hour;
-    const endTime = new Date(`1970-01-01T${startTime}:00`);
-    endTime.setMinutes(endTime.getMinutes() + 30);
-    const endTimeStr = `${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}`;
-    
-    reserve(email, date, startTime, endTimeStr, id).then((res) => {
-      console.log(res);
+  const handleRangeSelect = (startTime, endTime) => {
+    setSelectedRange({ start: startTime, end: endTime });
+  };
+
+  const handleBookSelected = () => {
+    if (!requireEmail() || !selectedRange) return;
+    setBooking(true);
+    reserve(email, date, selectedRange.start, selectedRange.end, id).then((res) => {
       setIsError(res[0] === 0);
       setMessage(res[1]);
       setHasSubmitted(true);
+      setBooking(false);
+      if (res[0] === 1) setSelectedRange(null);
     });
   };
 
   const handleBookAll = () => {
     if (!requireEmail()) return;
+    setBooking(true);
     const slots = findBestBookingPlan(hours);
+    let completed = 0;
+    let lastResult = null;
     slots.forEach((slot, index) => {
       setTimeout(() => {
         reserve(email, date, slot[0], slot[1], id).then((res) => {
-          console.log(res);
-          setIsError(res[0] === 0);
-          setMessage(res[1]);
-          setHasSubmitted(true);
+          lastResult = res;
+          completed++;
+          if (completed === slots.length) {
+            setIsError(lastResult[0] === 0);
+            setMessage(lastResult[1]);
+            setHasSubmitted(true);
+            setBooking(false);
+          }
         });
       }, index * 1000);
     });
   };
-  
+
   return (
     <ListItem
       sx={{
@@ -128,26 +137,38 @@ export default function SeatTile({name, description, hours, id, date}) {
       {hasAvailableSlots && (
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <Box sx={{ p: 2, pt: 0, borderTop: '1px solid #e5e7eb' }}>
-            <Typography variant="body2" sx={{ color: '#6b7280', mb: 2, fontWeight: 500 }}>
-              Available time slots:
-            </Typography>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
-              {availableHours.map((hour, i) => (
-                <Hour key={i} hour={hour} onClick={() => handleBookSlot(hour)}/>
-              ))}
+            {/* Time slot bar */}
+            <Box sx={{ mt: 2, mb: 2 }}>
+              <TimeSlotBar hours={hours} onSelect={handleRangeSelect} />
             </Box>
 
-            <Button
-              color='primary'
-              variant="contained"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleBookAll();
-              }}
-              sx={{ mt: 1 }}
-            >
-              Book All Available
-            </Button>
+            {/* Action buttons */}
+            <Box sx={{ display: 'flex', gap: 1, mt: 2, flexWrap: 'wrap' }}>
+              {selectedRange && (
+                <Button
+                  variant="contained"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleBookSelected();
+                  }}
+                  disabled={booking}
+                  sx={{ backgroundColor: '#1d4ed8', '&:hover': { backgroundColor: '#1e40af' } }}
+                >
+                  {booking ? 'Booking...' : `Book ${selectedRange.start} → ${selectedRange.end}`}
+                </Button>
+              )}
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleBookAll();
+                }}
+                disabled={booking}
+              >
+                Book All Available
+              </Button>
+            </Box>
 
             {hasSubmitted && (
               <Alert severity={isError ? 'error' : 'success'} sx={{ mt: 2 }}>
