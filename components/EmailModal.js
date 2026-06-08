@@ -39,13 +39,15 @@ export default function EmailModal() {
       <div onTransitionEnd={showModal ? handleOpen : undefined}>
         {/* Header */}
         <div
-          className="px-6 py-5 text-white"
+          className="py-5 text-white"
           style={{ background: university.colors.gradient }}
         >
-          <h2 className="text-lg font-bold">Set Your Email</h2>
-          <p className="text-sm opacity-90 mt-1">
-            Required to book seats at {university.shortName}
-          </p>
+          <div className="px-6">
+            <h2 className="text-lg font-bold">Set Your Email</h2>
+            <p className="text-sm opacity-90 mt-1">
+              Required to book seats at {university.shortName}
+            </p>
+          </div>
         </div>
 
         {/* Body */}

@@ -25,9 +25,11 @@ export default function DisclaimerModal() {
   return (
     <Modal open={show} onClose={() => {}} maxWidth="640px">
       {/* Header */}
-      <div className="px-6 py-5 bg-amber-500 text-white">
-        <h2 className="text-lg font-bold">⚠️ Important Notice</h2>
-        <p className="text-sm opacity-90 mt-1">FastBooker is NOT affiliated with Affluences</p>
+      <div className="py-5 bg-amber-500 text-white">
+        <div className="px-6">
+          <h2 className="text-lg font-bold">⚠️ Important Notice</h2>
+          <p className="text-sm opacity-90 mt-1">FastBooker is NOT affiliated with Affluences</p>
+        </div>
       </div>
 
       {/* Body */}
