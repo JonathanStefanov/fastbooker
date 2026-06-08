@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { useState } from 'react';
+import { useEmail } from '@/components/EmailContext';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import ListItem from '@mui/material/ListItem';
@@ -16,16 +17,18 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import Hour from './Hour';
 
-export default function SeatTile({name, description, hours, id, email, date}) {
+export default function SeatTile({name, description, hours, id, date}) {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [isError, setIsError] = useState(false);
   const [message, setMessage] = useState('');
   const [expanded, setExpanded] = useState(false);
+  const { email, requireEmail } = useEmail();
 
   const availableHours = hours.filter(hour => hour.places_available > 0);
   const hasAvailableSlots = availableHours.length > 0;
 
   const handleBookSlot = (hour) => {
+    if (!requireEmail()) return;
     // Calculate end time (30 minutes after start time)
     const startTime = hour.hour;
     const endTime = new Date(`1970-01-01T${startTime}:00`);
@@ -41,6 +44,7 @@ export default function SeatTile({name, description, hours, id, email, date}) {
   };
 
   const handleBookAll = () => {
+    if (!requireEmail()) return;
     const slots = findBestBookingPlan(hours);
     slots.forEach((slot, index) => {
       setTimeout(() => {

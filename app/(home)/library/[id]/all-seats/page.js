@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -23,20 +23,10 @@ async function fetchAllSeats(libraryId, date) {
 
 export default function AllSeats({ params }) {
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
-  const [email, setEmail] = useState('');
   const [search, setSearch] = useState('');
   const [hideNoVacancies, setHideNoVacancies] = useState(false);
   const [sortBy, setSortBy] = useState('number');
   const [hideReserved, setHideReserved] = useState(true);
-
-  useEffect(() => {
-    const savedEmail = localStorage.getItem('userEmail');
-    if (savedEmail) setEmail(savedEmail);
-
-    const handleEmailChange = (event) => setEmail(event.detail);
-    window.addEventListener('emailChanged', handleEmailChange);
-    return () => window.removeEventListener('emailChanged', handleEmailChange);
-  }, []);
 
   const { data: seats, isLoading } = useQuery({
     queryKey: ['allSeats', params.id, selectedDate],
@@ -129,7 +119,7 @@ export default function AllSeats({ params }) {
                   description={`${seat.floor_name} - ${seat.description}`}
                   date={selectedDate}
                   hours={seat.hours}
-                  email={email}
+
                 />
               ))}
             </List>

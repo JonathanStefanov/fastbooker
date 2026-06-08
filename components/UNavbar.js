@@ -1,39 +1,23 @@
 "use client";
-import { IoIosArrowBack} from 'react-icons/io';
+import { IoIosArrowBack } from 'react-icons/io';
 import { HiOutlineHome } from 'react-icons/hi';
-import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Typography, TextField, Box } from '@mui/material';
+import { FiMail } from 'react-icons/fi';
+import React from 'react';
+import { AppBar, Toolbar, Typography, Box } from '@mui/material';
 import { Quicksand } from 'next/font/google'
 import { twMerge } from 'tailwind-merge'
 import { useUniversity } from './UniversityContext';
+import { useEmail } from './EmailContext';
 
 const font = Quicksand({ subsets: ['latin'], weight: ['400', '600'] })
 
 export default function UNavbar() {
-  const [email, setEmail] = useState('');
   const { university } = useUniversity();
-
-  // Load email from localStorage on mount
-  useEffect(() => {
-    const savedEmail = localStorage.getItem('userEmail');
-    if (savedEmail) {
-      setEmail(savedEmail);
-    }
-  }, []);
-
-  // Save email to localStorage and dispatch event whenever it changes
-  const handleEmailChange = (event) => {
-    const newEmail = event.target.value;
-    setEmail(newEmail);
-    localStorage.setItem('userEmail', newEmail);
-
-    // Dispatch custom event so other components can react to email changes
-    window.dispatchEvent(new CustomEvent('emailChanged', { detail: newEmail }));
-  };
+  const { email, openEmailModal } = useEmail();
 
   return (
     <AppBar style={{
-      position: 'relative', 
+      position: 'relative',
       background: university.colors.gradient,
       boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)'
     }}>
@@ -64,29 +48,20 @@ export default function UNavbar() {
           </div>
         </Box>
 
-        {/* Email input on the right */}
-        <Box sx={{ display: { xs: 'none', md: 'block' } }}>
-          <TextField
-            label={`${university.shortName} Email`}
-            variant="outlined"
-            size="small"
-            value={email}
-            onChange={handleEmailChange}
-            placeholder={`@${university.emailDomain}`}
-            sx={{
-              backgroundColor: 'white',
-              borderRadius: '8px',
-              minWidth: '250px',
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  borderColor: 'rgba(255, 255, 255, 0.5)',
-                },
-                '&:hover fieldset': {
-                  borderColor: 'white',
-                },
-              }
+        {/* Email button on the right */}
+        <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <button
+            onClick={openEmailModal}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all hover:opacity-90"
+            style={{
+              backgroundColor: 'rgba(255,255,255,0.2)',
+              color: 'white',
+              backdropFilter: 'blur(4px)',
             }}
-          />
+          >
+            <FiMail size={16} />
+            {email ? email : 'Set Email'}
+          </button>
         </Box>
       </Toolbar>
     </AppBar>

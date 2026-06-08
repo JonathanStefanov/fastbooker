@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import TextField from '@mui/material/TextField';
 import getSeats from '@/lib/getSeats';
@@ -24,20 +24,10 @@ async function fetchSeats(libraryId, floorId, date) {
 
 export default function Floor({ params }) {
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
-  const [email, setEmail] = useState('');
   const [search, setSearch] = useState('');
   const [sortBy, setSortBy] = useState('number');
   const [hideNoVacancies, setHideNoVacancies] = useState(false);
   const [hideReserved, setHideReserved] = useState(true);
-
-  useEffect(() => {
-    const savedEmail = localStorage.getItem('userEmail');
-    if (savedEmail) setEmail(savedEmail);
-
-    const handleEmailChange = (event) => setEmail(event.detail);
-    window.addEventListener('emailChanged', handleEmailChange);
-    return () => window.removeEventListener('emailChanged', handleEmailChange);
-  }, []);
 
   const { data: seats, isLoading } = useQuery({
     queryKey: ['seats', params.id, params.floorId, selectedDate],
@@ -125,7 +115,7 @@ export default function Floor({ params }) {
                   description={seat.description}
                   date={selectedDate}
                   hours={seat.hours}
-                  email={email}
+
                 />
               ))}
             </List>

@@ -1,9 +1,4 @@
-import Image from 'next/image'
-import EmailInput from '@/components/EmailInput'
-import getBSHFloors from '@/lib/getFloors';
-import FloorTile from '@/components/FloorTile';
 import getFloors from '@/lib/getFloors';
-import Link from 'next/link';
 import ViewAllSeatsButton from './ViewAllSeatsButton';
 import RoomList from './RoomList';
 
