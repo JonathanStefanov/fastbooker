@@ -2,27 +2,28 @@
 
 import { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
-import getSeats from '@/lib/getSeats';
 import CircularProgress from '@mui/material/CircularProgress';
-import { formatDate } from '@/lib/utils';
-import { searchMultiField } from '@/lib/fuzzySearch';
-import DateSelector from './DateSelector';
-import SeatTile from './SeatTile';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 import List from '@mui/material/List';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
+import { formatDate } from '@/lib/utils';
+import { searchMultiField } from '@/lib/fuzzySearch';
+import DateSelector from '../floor/[floorId]/DateSelector';
+import SeatTile from '../floor/[floorId]/SeatTile';
+import getAllSeats from '@/lib/getAllSeats';
 
-export default function Floor({ params }) {
+export default function AllSeats({ params }) {
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
   const [seats, setSeats] = useState(null);
   const [email, setEmail] = useState('');
   const [search, setSearch] = useState('');
-  const [sortBy, setSortBy] = useState('number');
   const [hideNoVacancies, setHideNoVacancies] = useState(false);
+  const [sortBy, setSortBy] = useState('number'); // 'number' or 'capacity'
+  const [hideReserved, setHideReserved] = useState(true); // Default to ON
 
   // Load email from localStorage and listen for changes
   useEffect(() => {
@@ -40,12 +41,11 @@ export default function Floor({ params }) {
   }, []);
 
   useEffect(() => {
-    getSeats(params.id, params.floorId, selectedDate).then((data) => {
-      const allSeats = data.flat(1);
-      setSeats(allSeats);
-      console.log(allSeats);
+    getAllSeats(params.id, selectedDate).then((data) => {
+      setSeats(data);
+      console.log(data);
     });
-  }, [params.id, params.floorId, selectedDate]);
+  }, [params.id, selectedDate]);
 
   const handleDateChange = (date) => {
     setSeats(null);
@@ -56,18 +56,26 @@ export default function Floor({ params }) {
     setSearch(event.target.value);
   };
 
+  const handleHideNoVacanciesChange = (event) => {
+    setHideNoVacancies(event.target.checked);
+  };
+
+  const handleHideReservedChange = (event) => {
+    setHideReserved(event.target.checked);
+  };
+
   const handleSortChange = (event, newSortBy) => {
     if (newSortBy !== null) {
       setSortBy(newSortBy);
     }
   };
 
-  const handleHideNoVacanciesChange = (event) => {
-    setHideNoVacancies(event.target.checked);
-  };
-
   const hasVacancies = (seat) => {
     return seat.hours && seat.hours.some(hour => hour.places_available > 0);
+  };
+
+  const isReserved = (seat) => {
+    return seat.description && seat.description.toLowerCase().includes('riservato');
   };
 
   // Filter and sort seats
@@ -76,17 +84,20 @@ export default function Floor({ params }) {
 
     let filtered = seats
       .filter((seat) =>
-        searchMultiField(seat, ['resource_name', 'description'], search)
+        searchMultiField(seat, ['resource_name', 'description', 'floor_name'], search)
       )
-      .filter((seat) => !hideNoVacancies || hasVacancies(seat));
+      .filter((seat) => !hideNoVacancies || hasVacancies(seat))
+      .filter((seat) => !hideReserved || !isReserved(seat));
 
     if (sortBy === 'capacity') {
+      // Sort by number of available slots (descending)
       filtered = filtered.sort((a, b) => {
         const aAvailable = a.hours.filter(h => h.places_available > 0).length;
         const bAvailable = b.hours.filter(h => h.places_available > 0).length;
         return bAvailable - aAvailable;
       });
     } else {
+      // Sort by seat number/name (ascending)
       filtered = filtered.sort((a, b) => {
         return a.resource_name.localeCompare(b.resource_name, undefined, { numeric: true });
       });
@@ -100,6 +111,11 @@ export default function Floor({ params }) {
   return (
     <div className="py-8 px-4">
       <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">All Available Seats</h1>
+          <p className="text-lg text-gray-600">Viewing seats across all rooms</p>
+        </div>
+
         <div className="flex flex-col gap-6 mb-6">
           {/* Date Selector - Full Width */}
           <div className="flex justify-center">
@@ -177,7 +193,7 @@ export default function Floor({ params }) {
                     key={i}
                     id={seat.resource_id}
                     name={seat.resource_name}
-                    description={seat.description}
+                    description={`${seat.floor_name} - ${seat.description}`}
                     date={selectedDate}
                     hours={seat.hours}
                     email={email}
