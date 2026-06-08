@@ -4,6 +4,7 @@ import UNavbar from '@/components/UNavbar'
 import Footer from '@/components/Footer'
 import DisclaimerModal from '@/components/DisclaimerModal'
 import { UniversityProvider } from '@/components/UniversityContext'
+import QueryProvider from '@/components/QueryProvider'
 import { twMerge } from 'tailwind-merge'
 import { Analytics } from '@vercel/analytics/react';
 
@@ -18,14 +19,16 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={twMerge(inter.className, 'bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col min-h-screen')}>
-        <UniversityProvider>
-          <DisclaimerModal />
-          <UNavbar/>
-          <main className="flex-grow">
-            {children}
-          </main>
-          <Footer />
-        </UniversityProvider>
+        <QueryProvider>
+          <UniversityProvider>
+            <DisclaimerModal />
+            <UNavbar/>
+            <main className="flex-grow">
+              {children}
+            </main>
+            <Footer />
+          </UniversityProvider>
+        </QueryProvider>
         <Analytics/>
         </body>
     </html>

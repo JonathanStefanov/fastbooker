@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -16,91 +17,57 @@ import DateSelector from '../floor/[floorId]/DateSelector';
 import SeatTile from '../floor/[floorId]/SeatTile';
 import getAllSeats from '@/lib/getAllSeats';
 
+async function fetchAllSeats(libraryId, date) {
+  return getAllSeats(libraryId, date);
+}
+
 export default function AllSeats({ params }) {
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
-  const [seats, setSeats] = useState(null);
   const [email, setEmail] = useState('');
   const [search, setSearch] = useState('');
   const [hideNoVacancies, setHideNoVacancies] = useState(false);
-  const [sortBy, setSortBy] = useState('number'); // 'number' or 'capacity'
-  const [hideReserved, setHideReserved] = useState(true); // Default to ON
+  const [sortBy, setSortBy] = useState('number');
+  const [hideReserved, setHideReserved] = useState(true);
 
-  // Load email from localStorage and listen for changes
   useEffect(() => {
     const savedEmail = localStorage.getItem('userEmail');
-    if (savedEmail) {
-      setEmail(savedEmail);
-    }
+    if (savedEmail) setEmail(savedEmail);
 
-    const handleEmailChange = (event) => {
-      setEmail(event.detail);
-    };
-
+    const handleEmailChange = (event) => setEmail(event.detail);
     window.addEventListener('emailChanged', handleEmailChange);
     return () => window.removeEventListener('emailChanged', handleEmailChange);
   }, []);
 
-  useEffect(() => {
-    getAllSeats(params.id, selectedDate).then((data) => {
-      setSeats(data);
-      console.log(data);
-    });
-  }, [params.id, selectedDate]);
+  const { data: seats, isLoading } = useQuery({
+    queryKey: ['allSeats', params.id, selectedDate],
+    queryFn: () => fetchAllSeats(params.id, selectedDate),
+  });
 
-  const handleDateChange = (date) => {
-    setSeats(null);
-    setSelectedDate(date);
-  };
+  const handleDateChange = (date) => setSelectedDate(date);
+  const handleSearchChange = (event) => setSearch(event.target.value);
+  const handleHideNoVacanciesChange = (event) => setHideNoVacancies(event.target.checked);
+  const handleHideReservedChange = (event) => setHideReserved(event.target.checked);
+  const handleSortChange = (event, newSortBy) => { if (newSortBy !== null) setSortBy(newSortBy); };
 
-  const handleSearchChange = (event) => {
-    setSearch(event.target.value);
-  };
+  const hasVacancies = (seat) => seat.hours && seat.hours.some(hour => hour.places_available > 0);
+  const isReserved = (seat) => seat.description && seat.description.toLowerCase().includes('riservato');
 
-  const handleHideNoVacanciesChange = (event) => {
-    setHideNoVacancies(event.target.checked);
-  };
-
-  const handleHideReservedChange = (event) => {
-    setHideReserved(event.target.checked);
-  };
-
-  const handleSortChange = (event, newSortBy) => {
-    if (newSortBy !== null) {
-      setSortBy(newSortBy);
-    }
-  };
-
-  const hasVacancies = (seat) => {
-    return seat.hours && seat.hours.some(hour => hour.places_available > 0);
-  };
-
-  const isReserved = (seat) => {
-    return seat.description && seat.description.toLowerCase().includes('riservato');
-  };
-
-  // Filter and sort seats
   const getFilteredAndSortedSeats = () => {
     if (!seats) return [];
 
     let filtered = seats
-      .filter((seat) =>
-        searchMultiField(seat, ['resource_name', 'description', 'floor_name'], search)
-      )
+      .filter((seat) => searchMultiField(seat, ['resource_name', 'description', 'floor_name'], search))
       .filter((seat) => !hideNoVacancies || hasVacancies(seat))
       .filter((seat) => !hideReserved || !isReserved(seat));
 
     if (sortBy === 'capacity') {
-      // Sort by number of available slots (descending)
       filtered = filtered.sort((a, b) => {
         const aAvailable = a.hours.filter(h => h.places_available > 0).length;
         const bAvailable = b.hours.filter(h => h.places_available > 0).length;
         return bAvailable - aAvailable;
       });
     } else {
-      // Sort by seat number/name (ascending)
-      filtered = filtered.sort((a, b) => {
-        return a.resource_name.localeCompare(b.resource_name, undefined, { numeric: true });
-      });
+      filtered = filtered.sort((a, b) => a.resource_name.localeCompare(b.resource_name, undefined, { numeric: true }));
     }
 
     return filtered;
@@ -117,12 +84,9 @@ export default function AllSeats({ params }) {
         </div>
 
         <div className="flex flex-col gap-6 mb-6">
-          {/* Date Selector - Full Width */}
           <div className="flex justify-center">
             <DateSelector onDateChange={handleDateChange} />
           </div>
-
-          {/* Search Bar */}
           <div className="flex justify-center">
             <div className="w-full max-w-[500px]">
               <TextField
@@ -138,79 +102,41 @@ export default function AllSeats({ params }) {
           </div>
         </div>
 
-        {/* Controls: Sort Toggle and Hide No Vacancies */}
         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3, gap: 4, flexWrap: 'wrap' }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-            <Typography variant="body2" sx={{ color: '#6b7280', fontWeight: 500 }}>
-              Sort by:
-            </Typography>
-            <ToggleButtonGroup
-              value={sortBy}
-              exclusive
-              onChange={handleSortChange}
-              aria-label="sort seats"
-              size="small"
-            >
-              <ToggleButton value="number" aria-label="sort by number">
-                Seat Number
-              </ToggleButton>
-              <ToggleButton value="capacity" aria-label="sort by capacity">
-                Available Slots
-              </ToggleButton>
+            <Typography variant="body2" sx={{ color: '#6b7280', fontWeight: 500 }}>Sort by:</Typography>
+            <ToggleButtonGroup value={sortBy} exclusive onChange={handleSortChange} aria-label="sort seats" size="small">
+              <ToggleButton value="number" aria-label="sort by number">Seat Number</ToggleButton>
+              <ToggleButton value="capacity" aria-label="sort by capacity">Available Slots</ToggleButton>
             </ToggleButtonGroup>
           </Box>
-
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={hideReserved}
-                  onChange={handleHideReservedChange}
-                  color="primary"
-                />
-              }
-              label="Hide reserved seats"
-            />
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={hideNoVacancies}
-                  onChange={handleHideNoVacanciesChange}
-                  color="primary"
-                />
-              }
-              label="Hide seats without vacancies"
-            />
+            <FormControlLabel control={<Switch checked={hideReserved} onChange={handleHideReservedChange} color="primary" />} label="Hide reserved seats" />
+            <FormControlLabel control={<Switch checked={hideNoVacancies} onChange={handleHideNoVacanciesChange} color="primary" />} label="Hide seats without vacancies" />
           </Box>
         </Box>
 
         <div className="flex flex-col items-center">
-          {seats ? (
+          {isLoading ? (
+            <div className="mt-8"><CircularProgress /></div>
+          ) : filteredAndSortedSeats.length > 0 ? (
             <List sx={{ width: '100%', maxWidth: '900px', p: 0 }}>
-              {filteredAndSortedSeats.length > 0 ? (
-                filteredAndSortedSeats.map((seat, i) => (
-                  <SeatTile
-                    key={i}
-                    id={seat.resource_id}
-                    name={seat.resource_name}
-                    description={`${seat.floor_name} - ${seat.description}`}
-                    date={selectedDate}
-                    hours={seat.hours}
-                    email={email}
-                  />
-                ))
-              ) : (
-                <Box sx={{ textAlign: 'center', py: 4 }}>
-                  <Typography variant="h6" sx={{ color: '#6b7280' }}>
-                    No seats found matching your criteria.
-                  </Typography>
-                </Box>
-              )}
+              {filteredAndSortedSeats.map((seat, i) => (
+                <SeatTile
+                  key={i}
+                  id={seat.resource_id}
+                  name={seat.resource_name}
+                  description={`${seat.floor_name} - ${seat.description}`}
+                  date={selectedDate}
+                  hours={seat.hours}
+                  email={email}
+                />
+              ))}
             </List>
           ) : (
-            <div className="mt-8">
-              <CircularProgress />
-            </div>
+            <Box sx={{ textAlign: 'center', py: 4 }}>
+              <Typography variant="h6" sx={{ color: '#6b7280' }}>No seats found matching your criteria.</Typography>
+            </Box>
           )}
         </div>
       </div>

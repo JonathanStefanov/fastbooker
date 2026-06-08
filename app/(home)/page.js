@@ -1,43 +1,30 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useUniversity } from '@/components/UniversityContext';
 import LibraryTile from './LibraryTile';
 import UniversitySelector from '@/components/UniversitySelector';
 import CircularProgress from '@mui/material/CircularProgress';
 
+async function fetchLibraries(universityId) {
+  const res = await fetch(`/api/libraries?university=${universityId}`);
+  if (!res.ok) throw new Error('Failed to fetch libraries');
+  const data = await res.json();
+  return (data || []).sort((a, b) => {
+    if (a.seatCount !== undefined && b.seatCount !== undefined) {
+      return b.seatCount - a.seatCount;
+    }
+    return (a.primary_name || '').localeCompare(b.primary_name || '');
+  });
+}
+
 export default function Home() {
   const { university, universityId } = useUniversity();
-  const [libraries, setLibraries] = useState(null);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const controller = new AbortController();
-
-    setLoading(true);
-    setLibraries(null);
-
-    fetch(`/api/libraries?university=${universityId}`, { signal: controller.signal })
-      .then(res => res.json())
-      .then(data => {
-        if (controller.signal.aborted) return;
-        const sorted = (data || []).sort((a, b) => {
-          if (a.seatCount !== undefined && b.seatCount !== undefined) {
-            return b.seatCount - a.seatCount;
-          }
-          return (a.primary_name || '').localeCompare(b.primary_name || '');
-        });
-        setLibraries(sorted);
-        setLoading(false);
-      })
-      .catch(err => {
-        if (err.name === 'AbortError') return;
-        console.error('Failed to fetch libraries:', err);
-        setLoading(false);
-      });
-
-    return () => controller.abort();
-  }, [universityId]);
+  const { data: libraries, isLoading, isError } = useQuery({
+    queryKey: ['libraries', universityId],
+    queryFn: () => fetchLibraries(universityId),
+  });
 
   return (
     <main className="py-8 px-4">
@@ -50,9 +37,13 @@ export default function Home() {
 
       <UniversitySelector />
 
-      {loading ? (
+      {isLoading ? (
         <div className="flex justify-center mt-8">
           <CircularProgress />
+        </div>
+      ) : isError ? (
+        <div className="text-center mt-8">
+          <p className="text-red-500 text-lg">Failed to load libraries. Please try again.</p>
         </div>
       ) : libraries && libraries.length > 0 ? (
         <div className="flex flex-wrap justify-center gap-6 max-w-7xl mx-auto">
