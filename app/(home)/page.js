@@ -12,13 +12,15 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     setLoading(true);
     setLibraries(null);
 
-    fetch(`/api/libraries?university=${universityId}`)
+    fetch(`/api/libraries?university=${universityId}`, { signal: controller.signal })
       .then(res => res.json())
       .then(data => {
-        // Sort by seat count descending (if available), otherwise alphabetically
+        if (controller.signal.aborted) return;
         const sorted = (data || []).sort((a, b) => {
           if (a.seatCount !== undefined && b.seatCount !== undefined) {
             return b.seatCount - a.seatCount;
@@ -29,9 +31,12 @@ export default function Home() {
         setLoading(false);
       })
       .catch(err => {
+        if (err.name === 'AbortError') return;
         console.error('Failed to fetch libraries:', err);
         setLoading(false);
       });
+
+    return () => controller.abort();
   }, [universityId]);
 
   return (
