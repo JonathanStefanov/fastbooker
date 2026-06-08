@@ -49,20 +49,19 @@ export default function UNavbar() {
         </Box>
 
         {/* Email button on the right */}
-        <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-          <button
-            onClick={openEmailModal}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all hover:opacity-90"
-            style={{
-              backgroundColor: 'rgba(255,255,255,0.2)',
-              color: 'white',
-              backdropFilter: 'blur(4px)',
-            }}
-          >
-            <FiMail size={16} />
-            {email ? email : 'Set Email'}
-          </button>
-        </Box>
+        <button
+          onClick={openEmailModal}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all hover:opacity-90"
+          style={{
+            backgroundColor: 'rgba(255,255,255,0.2)',
+            color: 'white',
+            backdropFilter: 'blur(4px)',
+          }}
+        >
+          <FiMail size={16} />
+          <span className="hidden md:inline">{email ? email : 'Set Email'}</span>
+          <span className="md:hidden">{email ? email.split('@')[0] : 'Email'}</span>
+        </button>
       </Toolbar>
     </AppBar>
   );
