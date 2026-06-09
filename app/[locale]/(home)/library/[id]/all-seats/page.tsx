@@ -53,13 +53,13 @@ export default function AllSeats({ params }: { params: { id: string } }) {
   const getFilteredAndSortedSeats = (): Seat[] => {
     if (!seats) return [];
     let filtered = seats
-      .filter((seat) => searchMultiField(seat as unknown as Record<string, unknown>, ['resource_name', 'description', 'floor_name'], search))
-      .filter((seat) => !hideNoVacancies || hasVacancies(seat))
-      .filter((seat) => !hideReserved || !isReserved(seat));
+      .filter((seat: Seat) => searchMultiField(seat as unknown as Record<string, unknown>, ['resource_name', 'description', 'floor_name'], search))
+      .filter((seat: Seat) => !hideNoVacancies || hasVacancies(seat))
+      .filter((seat: Seat) => !hideReserved || !isReserved(seat));
     if (sortBy === 'capacity') {
-      filtered = filtered.sort((a, b) => b.hours.filter(h => h.places_available > 0).length - a.hours.filter(h => h.places_available > 0).length);
+      filtered = filtered.sort((a: Seat, b: Seat) => b.hours.filter(h => h.places_available > 0).length - a.hours.filter(h => h.places_available > 0).length);
     } else {
-      filtered = filtered.sort((a, b) => (a.resource_name ?? '').localeCompare(b.resource_name ?? '', undefined, { numeric: true }));
+      filtered = filtered.sort((a: Seat, b: Seat) => (a.resource_name ?? '').localeCompare(b.resource_name ?? '', undefined, { numeric: true }));
     }
     return filtered;
   };
