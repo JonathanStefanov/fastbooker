@@ -91,9 +91,10 @@ interface BookingSuccessModalProps {
   startTime?: string;
   endTime?: string;
   date?: string;
+  email?: string;
 }
 
-export default function BookingSuccessModal({ open, onClose, seatName, startTime, endTime, date }: BookingSuccessModalProps) {
+export default function BookingSuccessModal({ open, onClose, seatName, startTime, endTime, date, email }: BookingSuccessModalProps) {
   const [showConfetti, setShowConfetti] = useState(false);
 
   useEffect(() => {
@@ -192,6 +193,18 @@ export default function BookingSuccessModal({ open, onClose, seatName, startTime
                   </div>
                 )}
               </motion.div>
+
+              {email && (
+                <motion.div
+                  className="mt-4 p-3 rounded-lg text-sm text-center"
+                  style={{ backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', color: '#166534' }}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.85 }}
+                >
+                  Please confirm the booking at the email sent at: <strong>{email}</strong>
+                </motion.div>
+              )}
             </div>
 
             <div className="px-6 pb-5">

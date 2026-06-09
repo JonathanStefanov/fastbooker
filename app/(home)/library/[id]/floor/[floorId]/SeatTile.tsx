@@ -190,7 +190,7 @@ export default function SeatTile({ name, description, hours, id, date }: SeatTil
           </AnimatePresence>
         </ListItem>
       </motion.div>
-      <BookingSuccessModal open={showSuccess} onClose={() => setShowSuccess(false)} seatName={name} startTime={bookedRange?.start} endTime={bookedRange?.end} date={date} />
+      <BookingSuccessModal open={showSuccess} onClose={() => setShowSuccess(false)} seatName={name} startTime={bookedRange?.start} endTime={bookedRange?.end} date={date} email={email} />
     </>
   );
 }
