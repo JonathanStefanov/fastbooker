@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import Button from '@mui/material/Button';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 export default function ViewAllSeatsButton({ libraryId }: { libraryId: string }) {
   const t = useTranslations('library');

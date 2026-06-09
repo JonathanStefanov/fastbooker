@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { useUniversity } from '@/components/UniversityContext';
 import LibraryTile from './LibraryTile';
-import UniversitySelector from '@/components/UniversitySelector';
 import CircularProgress from '@mui/material/CircularProgress';
 import type { Library } from '@/types';
 
@@ -60,10 +59,6 @@ export default function Home() {
           <h1 className="text-3xl font-bold text-gray-800 mb-2">{t('title')}</h1>
           <p className="text-lg text-gray-600">{t('subtitle')}</p>
         </div>
-      </motion.div>
-
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.4 }}>
-        <UniversitySelector />
       </motion.div>
 
       {isLoading ? (

@@ -5,6 +5,7 @@ import UNavbar from '@/components/UNavbar';
 import Footer from '@/components/Footer';
 import DisclaimerModal from '@/components/DisclaimerModal';
 import EmailModal from '@/components/EmailModal';
+import UniversitySelectModalWrapper from '@/components/UniversitySelectModalWrapper';
 import { twMerge } from 'tailwind-merge';
 import { Analytics } from '@vercel/analytics/react';
 import QueryProvider from '@/components/QueryProvider';
@@ -27,6 +28,7 @@ export default async function RootLayout({ children, params }: { children: React
               <NextIntlClientProvider messages={messages}>
                 <DisclaimerModal />
                 <EmailModal />
+                <UniversitySelectModalWrapper />
                 <UNavbar />
                 <main className="flex-grow">
                   {children}

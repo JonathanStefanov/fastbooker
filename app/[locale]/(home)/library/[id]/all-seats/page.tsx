@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -31,6 +32,11 @@ export default function AllSeats({ params }: { params: { id: string } }) {
   const [hideNoVacancies, setHideNoVacancies] = useState(false);
   const [sortBy, setSortBy] = useState<'number' | 'capacity'>('number');
   const [hideReserved, setHideReserved] = useState(true);
+
+  const t = useTranslations('allSeats');
+  const tSort = useTranslations('sort');
+  const tFilter = useTranslations('filter');
+  const tCommon = useTranslations('common');
 
   const { data: seats, isLoading } = useQuery({
     queryKey: ['allSeats', params.id, selectedDate],
@@ -90,15 +96,7 @@ export default function AllSeats({ params }: { params: { id: string } }) {
           {isLoading ? (
             <div className="mt-8"><CircularProgress /></div>
           ) : (
-            <List sx={{ width: '100%', maxWidth: '900px', p: 0 }}>
-              {filteredAndSortedSeats.length > 0 ? (
-                filteredAndSortedSeats.map((seat, i) => (
-                  <SeatTile key={i} id={seat.resource_id} name={seat.resource_name} description={`${seat.floor_name} - ${seat.description}`} date={selectedDate} hours={seat.hours} />
-                ))
-              ) : (
-                <Box sx={{ textAlign: 'center', py: 4 }}><Typography variant="h6" sx={{ color: '#6b7280' }}>{t('noResults')}</Typography></Box>
-              )}
-            </List>
+            <Box sx={{ textAlign: 'center', py: 4 }}><Typography variant="h6" sx={{ color: '#6b7280' }}>{t('noResults')}</Typography></Box>
           )}
         </div>
       </div>

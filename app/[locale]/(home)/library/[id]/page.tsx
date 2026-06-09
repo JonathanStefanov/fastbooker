@@ -3,9 +3,9 @@ import ViewAllSeatsButton from './ViewAllSeatsButton';
 import RoomList from './RoomList';
 import { getTranslations } from 'next-intl/server';
 
-export default async function Home({ params }: { params: { id: string } }) {
-  const t = await getTranslations('library');
+export default async function Home({ params }: { params: { id: string; locale: string } }) {
   const floors = await getFloors(params.id);
+  const t = await getTranslations('library');
 
   return (
     <main className="py-8 px-4">

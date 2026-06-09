@@ -1,19 +1,28 @@
 {
   "common": {
+    "appName": "FastBooker",
+    "appPrefix": "UniPD",
     "search": "Search",
     "searchPlaceholder": "e.g., E 1 16 (all terms must match)",
     "loading": "Loading…",
-    "error": "Error",
-    "success": "Success",
+    "back": "Back",
+    "go": "Go",
+    "close": "Close",
+    "accept": "Accept",
+    "decline": "Decline",
+    "book": "Book",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No",
     "open": "Open",
     "closed": "Closed",
-    "book": "Book",
-    "cancel": "Cancel"
+    "error": "Error",
+    "success": "Success"
   },
   "home": {
     "title": "Welcome to FastBooker",
     "subtitle": "Book your seat in one go!",
-    "loadError": "Failed to load libraries. Please try again.",
     "seatCount": "{count, plural, one {# seat} other {# seats}}",
     "occupancy": "{percent}% full"
   },
@@ -34,13 +43,10 @@
     "availableSlots": "{count, plural, one {# slot} other {# slots}}",
     "noAvailableSlots": "No available slots",
     "availableTimeSlots": "Available time slots:",
-    "bookAllSelected": "Book All Selected",
-    "bookCountSelected": "Book {count} Selected",
+    "bookAllAvailable": "Book All Available",
+    "bookSlots": "Book {count} slots",
     "selectSlots": "Select slots to book",
     "booking": "Booking…",
-    "bookingSuccess": "Booking successful!",
-    "bookingFailed": "Booking failed. Please try again.",
-    "emailRequired": "Please set your email first",
     "reservedLabel": "Reserved"
   },
   "sort": {
@@ -52,22 +58,22 @@
     "hideReserved": "Hide reserved seats",
     "hideNoVacancies": "Hide seats without vacancies"
   },
+  "date": {
+    "today": "Today"
+  },
   "navbar": {
+    "emailLabel": "UniPD Email",
     "setEmail": "Set Email",
-    "emailShort": "Email"
+    "emailShort": "Email",
+    "changeUniversity": "Change university"
   },
   "email": {
-    "title": "University Email",
-    "description": "Enter your university email to make bookings",
-    "label": "Email",
-    "placeholder": "@{domain}",
-    "invalidEmail": "Please enter a valid {university} email address (@{domain})",
-    "save": "Save",
-    "skip": "Skip"
+    "label": "UniPD Email",
+    "invalidEmail": "Please enter a valid UniPD email address"
   },
   "disclaimer": {
     "modalTitle": "⚠️ Important Notice",
-    "notAffiliated": "FastBooker is NOT affiliated with Affluences",
+    "notAffiliated": "FastBooker is NOT affiliated with Affluences.",
     "beforeUsing": "Before using this application, please understand:",
     "unofficialTool": "This is an unofficial tool that may violate Affluences' Terms of Service",
     "accountBanned": "Your Affluences account could be suspended or banned",
@@ -76,8 +82,8 @@
     "noWarranty": "No warranty or guarantee is provided",
     "educationalOnly": "This is for educational and personal use only",
     "educationalPurpose": "This project was created for educational purposes. By continuing, you accept full responsibility for any consequences.",
-    "useOfficial": "Use Official App",
-    "iUnderstand": "I Understand",
+    "useOfficial": "Use Official App Instead",
+    "iUnderstand": "I Understand, Continue",
     "readFull": "Read full disclaimer"
   },
   "disclaimerPage": {
@@ -88,11 +94,11 @@
     "useAtOwnRiskTitle": "Use at Your Own Risk",
     "useAtOwnRiskDesc": "By using FastBooker, you acknowledge and accept the following risks:",
     "potentialRisksTitle": "Potential Risks",
-    "tosViolation": "Using this tool likely violates Affluences' Terms of Service",
-    "accountSuspension": "Your Affluences account may be suspended or permanently banned",
-    "serviceInterruption": "This service may stop working at any time if Affluences changes their API",
-    "noWarrantyItem": "This software is provided \"AS IS\" without warranty of any kind",
-    "legalConsequences": "Unauthorized API access may have legal implications in some jurisdictions",
+    "tosViolation": "Terms of Service Violations: Using this tool likely violates Affluences' Terms of Service",
+    "accountSuspension": "Account Suspension: Your Affluences account may be suspended or permanently banned",
+    "serviceInterruption": "Service Interruption: This service may stop working at any time if Affluences changes their API",
+    "noWarrantyItem": "No Warranty: This software is provided \"AS IS\" without warranty of any kind",
+    "legalConsequences": "Legal Consequences: Unauthorized API access may have legal implications in some jurisdictions",
     "yourResponsibilitiesTitle": "Your Responsibilities",
     "resp1": "You will use this tool responsibly and ethically",
     "resp2": "You will not abuse the service with excessive requests",
@@ -118,19 +124,32 @@
     "ethical4": "Consider the impact on other students",
     "ethical5": "Support the official Affluences app when possible",
     "contactTitle": "Contact",
-    "contactAffluences": "For Affluences Representatives: If you have concerns about this project, please contact the repository owner through GitHub issues.",
+    "contactAffluences": "For Affluences Representatives: If you have concerns about this project, please contact the repository owner through {link}. We will respond promptly and cooperatively.",
     "contactUsers": "For Users: If you have questions or concerns, please open an issue on GitHub.",
+    "githubIssues": "GitHub issues",
     "noWarrantyTitle": "No Warranty",
-    "noWarrantyText": "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND.",
+    "noWarrantyText": "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
     "lastUpdated": "Last Updated: January 2026",
     "backToHome": "Back to Home",
     "visitOfficial": "Visit Official Affluences"
   },
   "footer": {
-    "disclaimer": "Disclaimer: FastBooker is an unofficial, independent project not affiliated with Affluences. Use at your own risk.",
+    "disclaimer": "⚠️ {boldStart}Disclaimer:{boldEnd} FastBooker is an unofficial, independent project not affiliated with Affluences. Use at your own risk.",
     "fullDisclaimer": "Full Legal Disclaimer",
     "sourceCode": "Source Code",
     "officialApp": "Official Affluences App",
     "copyright": "Educational project • MIT License • No warranty provided"
+  },
+  "metadata": {
+    "title": "UniPD Fast Booker",
+    "description": "Unofficial library booking tool for educational purposes - Not affiliated with Affluences",
+    "disclaimerTitle": "Legal Disclaimer - UniPD Fast Booker",
+    "disclaimerDescription": "Legal disclaimer and terms of use for FastBooker"
+  },
+  "universityModal": {
+    "title": "Select Your University",
+    "subtitle": "Choose your institution to get started",
+    "searchPlaceholder": "Search universities...",
+    "noResults": "No universities found"
   }
 }

@@ -16,6 +16,8 @@ export default function DisclaimerModal() {
   const handleAccept = () => {
     localStorage.setItem('disclaimer-accepted', 'true');
     setShow(false);
+    // Notify UniversityContext that disclaimer was accepted
+    window.dispatchEvent(new CustomEvent('disclaimerAccepted'));
   };
 
   const handleDecline = () => {

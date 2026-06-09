@@ -37,6 +37,8 @@ export default function SeatTile({ name, description, hours, id, date }: SeatTil
   const [bookedRange, setBookedRange] = useState<{ start: string; end: string } | null>(null);
   const { email, requireEmail } = useEmail();
 
+  const t = useTranslations('seat');
+
   const availableHours = hours.filter(hour => hour.places_available > 0);
   const hasAvailableSlots = availableHours.length > 0;
 
@@ -169,14 +171,14 @@ export default function SeatTile({ name, description, hours, id, date }: SeatTil
                             {booking ? (
                               <motion.span animate={{ opacity: [1, 0.5, 1] }} transition={{ repeat: Infinity, duration: 1.2 }}>{t('booking')}</motion.span>
                             ) : (
-                              t('bookCountSelected', { count: selectedSlots.length })
+                              t('bookSlots', { count: selectedSlots.length })
                             )}
                           </Button>
                         </motion.div>
                       )}
                     </AnimatePresence>
                     <Button variant="outlined" color="primary" onClick={(e) => { e.stopPropagation(); handleBookAll(); }} disabled={booking}>
-                      {t('bookAllSelected')}
+                      {t('bookAllAvailable')}
                     </Button>
                   </Box>
                   <AnimatePresence>
