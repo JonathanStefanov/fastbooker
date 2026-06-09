@@ -1,0 +1,136 @@
+{
+  "common": {
+    "search": "Rechercher",
+    "searchPlaceholder": "ex. E 1 16 (tous les termes doivent correspondre)",
+    "loading": "Chargement…",
+    "error": "Erreur",
+    "success": "Succès",
+    "open": "Ouvert",
+    "closed": "Fermé",
+    "book": "Réserver",
+    "cancel": "Annuler"
+  },
+  "home": {
+    "title": "Bienvenue sur FastBooker",
+    "subtitle": "Réservez votre place en un clic !",
+    "loadError": "Impossible de charger les bibliothèques. Réessayez.",
+    "seatCount": "{count, plural, one {# place} other {# places}}",
+    "occupancy": "{percent}% plein"
+  },
+  "library": {
+    "selectRoom": "Sélectionnez une Salle",
+    "subtitle": "Réservez votre place en un clic !",
+    "viewAllSeats": "Voir Toutes les Places"
+  },
+  "allSeats": {
+    "title": "Toutes les Places Disponibles",
+    "subtitle": "Affichage des places dans toutes les salles",
+    "noResults": "Aucune place trouvée avec les critères sélectionnés."
+  },
+  "floor": {
+    "noResults": "Aucune place trouvée avec les critères sélectionnés."
+  },
+  "seat": {
+    "availableSlots": "{count, plural, one {# créneau} other {# créneaux}}",
+    "noAvailableSlots": "Aucun créneau disponible",
+    "availableTimeSlots": "Créneaux horaires disponibles :",
+    "bookAllSelected": "Réserver Tout Sélectionné",
+    "bookCountSelected": "Réserver {count} Sélectionnés",
+    "selectSlots": "Sélectionnez les créneaux à réserver",
+    "booking": "Réservation…",
+    "bookingSuccess": "Réservation réussie !",
+    "bookingFailed": "Échec de la réservation. Réessayez.",
+    "emailRequired": "Veuillez d'abord définir votre email",
+    "reservedLabel": "Réservé"
+  },
+  "sort": {
+    "label": "Trier par :",
+    "seatNumber": "Numéro de Place",
+    "availableSlots": "Créneaux Disponibles"
+  },
+  "filter": {
+    "hideReserved": "Masquer les places réservées",
+    "hideNoVacancies": "Masquer les places sans disponibilité"
+  },
+  "navbar": {
+    "setEmail": "Définir Email",
+    "emailShort": "Email"
+  },
+  "email": {
+    "title": "Email Universitaire",
+    "description": "Entrez votre email universitaire pour effectuer des réservations",
+    "label": "Email",
+    "placeholder": "@{domain}",
+    "invalidEmail": "Veuillez entrer une adresse email {university} valide (@{domain})",
+    "save": "Enregistrer",
+    "skip": "Passer"
+  },
+  "disclaimer": {
+    "modalTitle": "⚠️ Avis Important",
+    "notAffiliated": "FastBooker N'EST PAS affilié à Affluences",
+    "beforeUsing": "Avant d'utiliser cette application, veuillez comprendre que :",
+    "unofficialTool": "C'est un outil non officiel qui pourrait violer les Conditions d'Utilisation d'Affluences",
+    "accountBanned": "Votre compte Affluences pourrait être suspendu ou banni",
+    "stopWorking": "Ce service pourrait cesser de fonctionner à tout moment",
+    "ownRisk": "Vous utilisez cet outil à vos propres risques",
+    "noWarranty": "Aucune garantie fournie",
+    "educationalOnly": "Ceci est uniquement pour un usage éducatif et personnel",
+    "educationalPurpose": "Ce projet a été créé à des fins éducatives. En continuant, vous acceptez l'entière responsabilité de toute conséquence.",
+    "useOfficial": "Utiliser l'App Officielle",
+    "iUnderstand": "J'ai Compris",
+    "readFull": "Lire la déclaration complète"
+  },
+  "disclaimerPage": {
+    "title": "⚠️ Mentions Légales",
+    "notAffiliatedTitle": "Non Affilié à Affluences",
+    "notAffiliatedBold": "FastBooker est un projet indépendant et non officiel et N'EST PAS affilié, approuvé ou connecté à Affluences de quelque manière que ce soit.",
+    "notAffiliatedDesc": "Cette application a été créée par rétro-ingénierie de l'API d'Affluences à des fins éducatives.",
+    "useAtOwnRiskTitle": "Utilisez à Vos Propres Risques",
+    "useAtOwnRiskDesc": "En utilisant FastBooker, vous reconnaissez et acceptez les risques suivants :",
+    "potentialRisksTitle": "Risques Potentiels",
+    "tosViolation": "L'utilisation de cet outil viole probablement les Conditions d'Utilisation d'Affluences",
+    "accountSuspension": "Votre compte Affluences pourrait être suspendu ou banni de manière permanente",
+    "serviceInterruption": "Ce service pourrait cesser de fonctionner à tout moment si Affluences change son API",
+    "noWarrantyItem": "Ce logiciel est fourni \"TEL QUEL\" sans garantie d'aucune sorte",
+    "legalConsequences": "L'accès non autorisé à l'API pourrait avoir des implications juridiques dans certaines juridictions",
+    "yourResponsibilitiesTitle": "Vos Responsabilités",
+    "resp1": "Vous utiliserez cet outil de manière responsable et éthique",
+    "resp2": "Vous n'abuserez pas du service avec des requêtes excessives",
+    "resp3": "Vous respecterez les politiques de votre université et les lois applicables",
+    "resp4": "Vous acceptez l'entière responsabilité de toute conséquence résultant de l'utilisation",
+    "resp5": "Vous comprenez que ceci est uniquement pour un usage personnel et non commercial",
+    "educationalTitle": "Objectif Éducatif",
+    "eduCreated": "Ce projet a été créé pour :",
+    "eduPurpose1": "Des fins éducatives",
+    "eduPurpose2": "Démontrer des techniques d'intégration API",
+    "eduPurpose3": "Présenter une conception UX/UI améliorée",
+    "eduPurpose4": "Un usage personnel et non commercial",
+    "eduNotIntended": "Ce projet N'EST PAS destiné à :",
+    "eduNot1": "Un usage commercial",
+    "eduNot2": "Contourner les contrôles d'accès légitimes",
+    "eduNot3": "Monopoliser injustement les ressources de la bibliothèque",
+    "eduNot4": "Causer des dommages à l'infrastructure d'Affluences",
+    "ethicalTitle": "Directives d'Utilisation Éthique",
+    "ethicalDesc": "Si vous choisissez d'utiliser FastBooker :",
+    "ethical1": "Soyez respectueux de l'infrastructure d'Affluences",
+    "ethical2": "Ne faites pas de requêtes API excessives",
+    "ethical3": "N'utilisez pas la réservation automatisée pour monopoliser injustement les ressources",
+    "ethical4": "Considérez l'impact sur les autres étudiants",
+    "ethical5": "Soutenez l'application officielle d'Affluences quand c'est possible",
+    "contactTitle": "Contact",
+    "contactAffluences": "Pour les Représentants d'Affluences : Si vous avez des préoccupations, veuillez contacter le propriétaire du dépôt via les GitHub issues.",
+    "contactUsers": "Pour les Utilisateurs : Si vous avez des questions, veuillez ouvrir une issue sur GitHub.",
+    "noWarrantyTitle": "Aucune Garantie",
+    "noWarrantyText": "LE LOGICIEL EST FOURNI \"TEL QUEL\", SANS GARANTIE D'AUCUNE SORTE.",
+    "lastUpdated": "Dernière mise à jour : Janvier 2026",
+    "backToHome": "Retour à l'Accueil",
+    "visitOfficial": "Visiter Affluences Officiel"
+  },
+  "footer": {
+    "disclaimer": "Avertissement : FastBooker est un projet indépendant non officiel non affilié à Affluences. Utilisez à vos propres risques.",
+    "fullDisclaimer": "Mentions Légales Complètes",
+    "sourceCode": "Code Source",
+    "officialApp": "App Officielle Affluences",
+    "copyright": "Projet éducatif • Licence MIT • Aucune garantie fournie"
+  }
+}

@@ -2,6 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { useUniversity } from '@/components/UniversityContext';
 import LibraryTile from './LibraryTile';
 import UniversitySelector from '@/components/UniversitySelector';
@@ -39,6 +40,7 @@ const item = {
 
 export default function Home() {
   const { university, universityId } = useUniversity();
+  const t = useTranslations('home');
 
   const { data: libraries, isLoading, isError } = useQuery({
     queryKey: ['libraries', universityId],
@@ -55,8 +57,8 @@ export default function Home() {
         transition={{ duration: 0.4, ease: 'easeOut' }}
       >
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Welcome to FastBooker</h1>
-          <p className="text-lg text-gray-600">Book your seat in one go!</p>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">{t('title')}</h1>
+          <p className="text-lg text-gray-600">{t('subtitle')}</p>
         </div>
       </motion.div>
 
@@ -67,7 +69,7 @@ export default function Home() {
       {isLoading ? (
         <div className="flex justify-center mt-8"><CircularProgress /></div>
       ) : isError ? (
-        <div className="text-center mt-8"><p className="text-red-500 text-lg">Failed to load libraries. Please try again.</p></div>
+        <div className="text-center mt-8"><p className="text-red-500 text-lg">{t('loadError')}</p></div>
       ) : libraries && libraries.length > 0 ? (
         <motion.div className="flex flex-wrap justify-center gap-6 max-w-7xl mx-auto" variants={container} initial="hidden" animate="show">
           {libraries
@@ -85,9 +87,7 @@ export default function Home() {
               </motion.div>
             ))}
         </motion.div>
-      ) : (
-        <div className="text-center mt-8"><p className="text-gray-500 text-lg">No libraries found for {university.shortName}.</p></div>
-      )}
+      ) : null}
     </main>
   );
 }

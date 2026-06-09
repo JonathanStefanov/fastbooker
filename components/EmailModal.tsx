@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import Modal from './Modal';
 import { useEmail } from './EmailContext';
 import { useUniversity } from './UniversityContext';
@@ -8,6 +9,8 @@ import { useUniversity } from './UniversityContext';
 export default function EmailModal() {
   const { showModal, closeEmailModal, setEmail, email: currentEmail } = useEmail();
   const { university } = useUniversity();
+  const t = useTranslations('email');
+  const tCommon = useTranslations('common');
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
 
@@ -19,11 +22,11 @@ export default function EmailModal() {
   const handleSave = () => {
     const trimmed = input.trim().toLowerCase();
     if (!trimmed) {
-      setError('Email is required to book seats');
+      setError(t('invalidEmail', { university: university.shortName, domain: university.emailDomain }));
       return;
     }
     if (!trimmed.endsWith(`@${university.emailDomain}`)) {
-      setError(`Must be a @${university.emailDomain} address`);
+      setError(t('invalidEmail', { university: university.shortName, domain: university.emailDomain }));
       return;
     }
     setEmail(trimmed);
@@ -39,13 +42,13 @@ export default function EmailModal() {
       <div onTransitionEnd={showModal ? handleOpen : undefined}>
         <div className="py-5 text-white" style={{ background: university.colors.gradient }}>
           <div className="px-6">
-            <h2 className="text-lg font-bold">Set Your Email</h2>
-            <p className="text-sm opacity-90 mt-1">Required to book seats at {university.shortName}</p>
+            <h2 className="text-lg font-bold">{t('title')}</h2>
+            <p className="text-sm opacity-90 mt-1">{t('description')}</p>
           </div>
         </div>
 
         <div className="px-6 py-5">
-          <label className="block text-sm font-medium text-gray-700 mb-2">University Email</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">{t('label')}</label>
           <input
             type="email"
             value={input}
@@ -60,10 +63,10 @@ export default function EmailModal() {
 
         <div className="px-6 pb-5 flex gap-3">
           <button onClick={closeEmailModal} className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors">
-            Cancel
+            {tCommon('cancel')}
           </button>
           <button onClick={handleSave} className="flex-1 px-4 py-2.5 rounded-lg text-white font-medium transition-colors" style={{ backgroundColor: university.colors.primary }}>
-            Save Email
+            {t('save')}
           </button>
         </div>
       </div>

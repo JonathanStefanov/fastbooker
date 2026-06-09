@@ -2,11 +2,19 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
+import { useParams } from 'next/navigation';
 import { formatDate } from '@/lib/utils';
 import { useUniversity } from '@/components/UniversityContext';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import ButtonBase from '@mui/material/ButtonBase';
+
+const DAY_NAMES: Record<string, string[]> = {
+  en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+  it: ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'],
+  fr: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+};
 
 interface DateSelectorProps {
   onDateChange: (date: string) => void;
@@ -15,12 +23,13 @@ interface DateSelectorProps {
 export default function DateSelector({ onDateChange }: DateSelectorProps) {
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
   const { university } = useUniversity();
+  const { locale } = useParams() as { locale: string };
+
+  const dayNames = DAY_NAMES[locale] || DAY_NAMES.en;
 
   const getNext7Days = () => {
     const days = [];
     const today = new Date();
-    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
     for (let i = 0; i < 7; i++) {
       const date = new Date(today);
       date.setDate(today.getDate() + i);

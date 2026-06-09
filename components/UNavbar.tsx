@@ -8,12 +8,14 @@ import { Quicksand } from 'next/font/google';
 import { twMerge } from 'tailwind-merge';
 import { useUniversity } from './UniversityContext';
 import { useEmail } from './EmailContext';
+import { useTranslations } from 'next-intl';
 
 const font = Quicksand({ subsets: ['latin'], weight: ['400', '600'] });
 
 export default function UNavbar() {
   const { university } = useUniversity();
   const { email, openEmailModal } = useEmail();
+  const t = useTranslations('navbar');
 
   return (
     <motion.div
@@ -56,8 +58,8 @@ export default function UNavbar() {
             style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', backdropFilter: 'blur(4px)' }}
           >
             <FiMail size={16} />
-            <span className="hidden md:inline">{email ? email : 'Set Email'}</span>
-            <span className="md:hidden">{email ? email.split('@')[0] : 'Email'}</span>
+            <span className="hidden md:inline">{email ? email : t('setEmail')}</span>
+            <span className="md:hidden">{email ? email.split('@')[0] : t('emailShort')}</span>
           </button>
         </Toolbar>
       </AppBar>
