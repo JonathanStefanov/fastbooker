@@ -1,4 +1,5 @@
 import { getUniversity, DEFAULT_UNIVERSITY } from './universities';
+import { AFFLUENCES_SITES_API, AFFLUENCES_ORIGIN } from './config';
 import type { Library } from '@/types';
 
 export default async function getLibraries(universityId: string = DEFAULT_UNIVERSITY): Promise<Library[]> {
@@ -14,15 +15,15 @@ export default async function getLibraries(universityId: string = DEFAULT_UNIVER
     };
     
     try {
-      const response = await fetch("https://api.affluences.com/app/v3/sites", {
+      const response = await fetch(AFFLUENCES_SITES_API, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json, text/plain, */*",
           "Accept-Language": "fr",
           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-          "Origin": "https://affluences.com",
-          "Referer": "https://affluences.com/",
+          "Origin": AFFLUENCES_ORIGIN,
+          "Referer": `${AFFLUENCES_ORIGIN}/`,
         },
         body: JSON.stringify(body),
       });
