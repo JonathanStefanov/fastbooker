@@ -45,6 +45,7 @@ export default function UNavbar() {
                 <div className='flex items-center'>
                   <button
                     onClick={openUniModal}
+                    data-testid="university-badge"
                     className='flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold mr-3 shadow-md text-white transition-all hover:opacity-90 cursor-pointer'
                     style={{ backgroundColor: university.colors.primary }}
                     title={t('changeUniversity')}

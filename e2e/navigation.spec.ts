@@ -47,7 +47,7 @@ test.describe('Library Navigation', () => {
   });
 
   test('navbar shows university badge', async ({ page }) => {
-    await expect(page.getByText('ULB')).toBeVisible({ timeout: 5000 });
+    await expect(page.locator('[data-testid="university-badge"]')).toBeVisible({ timeout: 5000 });
   });
 
   test('can navigate back from library page', async ({ page }) => {

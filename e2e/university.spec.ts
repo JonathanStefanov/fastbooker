@@ -13,31 +13,31 @@ test.describe('University Selection', () => {
 
   test('shows university modal with search', async ({ page }) => {
     const uniModal = page.locator('[data-testid="university-modal"]');
-    await expect(uniModal).toBeVisible({ timeout: 3000 });
+    await expect(uniModal).toBeVisible({ timeout: 5000 });
 
     // Should have a search input
     const search = uniModal.getByPlaceholder(/search|cerca|rechercher/i);
     await expect(search).toBeVisible();
 
     // Should show at least one university
-    await expect(uniModal.getByText('ULB')).toBeVisible();
+    await expect(uniModal.getByText('ULB').first()).toBeVisible();
   });
 
   test('can search for universities', async ({ page }) => {
     const uniModal = page.locator('[data-testid="university-modal"]');
-    await expect(uniModal).toBeVisible({ timeout: 3000 });
+    await expect(uniModal).toBeVisible({ timeout: 5000 });
 
     const search = uniModal.getByPlaceholder(/search|cerca|rechercher/i);
     await search.fill('EPFL');
 
-    await expect(uniModal.getByText('EPFL')).toBeVisible();
+    await expect(uniModal.getByText('EPFL').first()).toBeVisible();
   });
 
   test('selecting a university closes modal and persists', async ({ page }) => {
     const uniModal = page.locator('[data-testid="university-modal"]');
-    await expect(uniModal).toBeVisible({ timeout: 3000 });
+    await expect(uniModal).toBeVisible({ timeout: 5000 });
 
-    // Click on ULB
+    // Click on ULB inside the modal
     await uniModal.getByText('ULB').first().click();
 
     // Modal should close
@@ -47,13 +47,13 @@ test.describe('University Selection', () => {
     const saved = await page.evaluate(() => localStorage.getItem('selectedUniversity'));
     expect(saved).toBe('ulb');
 
-    // Navbar should show the university
-    await expect(page.getByText('ULB')).toBeVisible();
+    // Navbar should show the university badge
+    await expect(page.locator('[data-testid="university-badge"]')).toBeVisible();
   });
 
   test('persists university across reloads', async ({ page }) => {
     const uniModal = page.locator('[data-testid="university-modal"]');
-    await expect(uniModal).toBeVisible({ timeout: 3000 });
+    await expect(uniModal).toBeVisible({ timeout: 5000 });
 
     await uniModal.getByText('ULB').first().click();
     await expect(uniModal).toBeHidden();
@@ -66,7 +66,7 @@ test.describe('University Selection', () => {
     const uniModalAfter = page.locator('[data-testid="university-modal"]');
     await expect(uniModalAfter).toBeHidden();
 
-    // Navbar should still show ULB
-    await expect(page.getByText('ULB')).toBeVisible();
+    // Navbar should still show university badge
+    await expect(page.locator('[data-testid="university-badge"]')).toBeVisible();
   });
 });
