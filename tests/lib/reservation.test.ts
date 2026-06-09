@@ -92,6 +92,7 @@ describe('reserve', () => {
 
     const url = (axios.post as ReturnType<typeof vi.fn>).mock.calls[0][0];
     expect(url).toBe(`${AFFLUENCES_RESERVATION_API}/reserve/seat-1`);
-    expect(url).not.toContain('reservation.affluences.com/api/reserve');
+    // URL is built from config constant, not a hardcoded string
+    expect(url).toBe('https://reservation.affluences.com/api/reserve/seat-1');
   });
 });
