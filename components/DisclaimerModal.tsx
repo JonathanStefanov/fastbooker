@@ -25,7 +25,7 @@ export default function DisclaimerModal() {
   };
 
   return (
-    <Modal open={show} onClose={() => {}} maxWidth="640px">
+    <Modal open={show} onClose={() => {}} maxWidth="640px" data-testid="disclaimer-modal">
       <div className="py-5 bg-amber-500 text-white">
         <div className="px-6">
           <h2 className="text-lg font-bold">{t('modalTitle')}</h2>
