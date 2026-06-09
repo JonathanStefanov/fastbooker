@@ -17,7 +17,6 @@ import { formatDate } from '@/lib/utils';
 import { searchMultiField } from '@/lib/fuzzySearch';
 import DateSelector from '../floor/[floorId]/DateSelector';
 import SeatTile from '../floor/[floorId]/SeatTile';
-import getAllSeats from '@/lib/getAllSeats';
 import type { Seat } from '@/types';
 
 export default function AllSeats({ params }: { params: { id: string } }) {
@@ -35,7 +34,11 @@ export default function AllSeats({ params }: { params: { id: string } }) {
 
   const { data: seats, isLoading } = useQuery({
     queryKey: ['allSeats', params.id, selectedDate],
-    queryFn: () => getAllSeats(params.id, selectedDate),
+    queryFn: async () => {
+      const res = await fetch(`/api/all-seats?library=${params.id}&date=${selectedDate}`);
+      if (!res.ok) throw new Error('Failed to fetch seats');
+      return res.json();
+    },
   });
 
   const handleDateChange = (date: string) => setSelectedDate(date);

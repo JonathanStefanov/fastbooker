@@ -5,7 +5,6 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 import TextField from '@mui/material/TextField';
-import getSeats from '@/lib/getSeats';
 import CircularProgress from '@mui/material/CircularProgress';
 import { formatDate } from '@/lib/utils';
 import { searchMultiField } from '@/lib/fuzzySearch';
@@ -21,7 +20,9 @@ import Switch from '@mui/material/Switch';
 import type { Seat } from '@/types';
 
 async function fetchSeats(libraryId: string, floorId: string, date: string): Promise<Seat[]> {
-  const data = await getSeats(libraryId, floorId, date);
+  const res = await fetch(`/api/seats?library=${libraryId}&floor=${floorId}&date=${date}`);
+  if (!res.ok) throw new Error('Failed to fetch seats');
+  const data = await res.json();
   return data.flat(1);
 }
 
