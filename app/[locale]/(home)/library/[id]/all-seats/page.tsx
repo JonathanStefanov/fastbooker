@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTranslations } from 'next-intl';
 import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -22,10 +21,6 @@ import getAllSeats from '@/lib/getAllSeats';
 import type { Seat } from '@/types';
 
 export default function AllSeats({ params }: { params: { id: string } }) {
-  const t = useTranslations('allSeats');
-  const tSort = useTranslations('sort');
-  const tFilter = useTranslations('filter');
-  const tCommon = useTranslations('common');
 
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
   const [search, setSearch] = useState('');

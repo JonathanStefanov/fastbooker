@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTranslations } from 'next-intl';
 import TextField from '@mui/material/TextField';
 import getSeats from '@/lib/getSeats';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -27,11 +26,6 @@ async function fetchSeats(libraryId: string, floorId: string, date: string): Pro
 }
 
 export default function Floor({ params }: { params: { id: string; floorId: string } }) {
-  const tFloor = useTranslations('floor');
-  const tSort = useTranslations('sort');
-  const tFilter = useTranslations('filter');
-  const tCommon = useTranslations('common');
-
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
   const [search, setSearch] = useState('');
   const [sortBy, setSortBy] = useState<'number' | 'capacity'>('number');

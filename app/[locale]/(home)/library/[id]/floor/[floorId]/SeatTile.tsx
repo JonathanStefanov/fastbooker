@@ -37,7 +37,6 @@ export default function SeatTile({ name, description, hours, id, date }: SeatTil
   const [bookedRange, setBookedRange] = useState<{ start: string; end: string } | null>(null);
   const { email, requireEmail } = useEmail();
 
-  const t = useTranslations('seat');
 
   const availableHours = hours.filter(hour => hour.places_available > 0);
   const hasAvailableSlots = availableHours.length > 0;
