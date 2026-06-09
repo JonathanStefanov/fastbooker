@@ -46,3 +46,6 @@ uni-screenshot.js
 /playwright-report
 /blob-report
 /.playwright
+-e 
+# GitHub CLI
+/.config/

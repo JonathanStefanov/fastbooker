@@ -68,8 +68,11 @@
     "changeUniversity": "Change university"
   },
   "email": {
+    "title": "Set Your Email",
+    "description": "Enter your university email to speed up booking",
     "label": "UniPD Email",
-    "invalidEmail": "Please enter a valid UniPD email address"
+    "invalidEmail": "Please enter a valid UniPD email address",
+    "save": "Save"
   },
   "disclaimer": {
     "modalTitle": "⚠️ Important Notice",
