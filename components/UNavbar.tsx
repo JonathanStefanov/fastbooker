@@ -1,19 +1,21 @@
-"use client";
+'use client';
 import { IoIosArrowBack } from 'react-icons/io';
 import { HiOutlineHome } from 'react-icons/hi';
-import { FiMail } from 'react-icons/fi';
+import { FiMail, FiChevronDown } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import { AppBar, Toolbar, Typography, Box } from '@mui/material';
 import { Quicksand } from 'next/font/google';
 import { twMerge } from 'tailwind-merge';
 import { useUniversity } from './UniversityContext';
 import { useEmail } from './EmailContext';
+import { useTranslations } from 'next-intl';
 
 const font = Quicksand({ subsets: ['latin'], weight: ['400', '600'] });
 
 export default function UNavbar() {
-  const { university } = useUniversity();
+  const { university, openUniModal } = useUniversity();
   const { email, openEmailModal } = useEmail();
+  const t = useTranslations('navbar');
 
   return (
     <motion.div
@@ -41,9 +43,15 @@ export default function UNavbar() {
             <div className='mx-4'>
               <Typography variant="h6">
                 <div className='flex items-center'>
-                  <div className='px-3 py-1.5 rounded-lg font-bold mr-3 shadow-md text-white' style={{ backgroundColor: university.colors.primary }}>
-                    {university.shortName}
-                  </div>
+                  <button
+                    onClick={openUniModal}
+                    className='flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold mr-3 shadow-md text-white transition-all hover:opacity-90 cursor-pointer'
+                    style={{ backgroundColor: university.colors.primary }}
+                    title={t('changeUniversity')}
+                  >
+                    <span>{university.shortName}</span>
+                    <FiChevronDown size={14} className='opacity-70' />
+                  </button>
                   <p className={twMerge(font.className, 'font-semibold text-lg')}>Fast Booker</p>
                 </div>
               </Typography>
@@ -56,8 +64,8 @@ export default function UNavbar() {
             style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', backdropFilter: 'blur(4px)' }}
           >
             <FiMail size={16} />
-            <span className="hidden md:inline">{email ? email : 'Set Email'}</span>
-            <span className="md:hidden">{email ? email.split('@')[0] : 'Email'}</span>
+            <span className="hidden md:inline">{email ? email : t('setEmail')}</span>
+            <span className="md:hidden">{email ? email.split('@')[0] : t('emailShort')}</span>
           </button>
         </Toolbar>
       </AppBar>

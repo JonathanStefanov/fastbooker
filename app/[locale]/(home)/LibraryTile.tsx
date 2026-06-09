@@ -5,6 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea, Chip } from '@mui/material';
+import { useTranslations } from 'next-intl';
 
 interface LibraryTileProps {
   name: string;
@@ -16,6 +17,9 @@ interface LibraryTileProps {
 }
 
 export default function LibraryTile({ name, image, id, closed, seatCount, occupancy }: LibraryTileProps) {
+  const t = useTranslations('common');
+  const tHome = useTranslations('home');
+
   return (
     <Card sx={{
       width: 320,
@@ -35,12 +39,12 @@ export default function LibraryTile({ name, image, id, closed, seatCount, occupa
             {name}
           </Typography>
           <div style={{ display: 'flex', gap: '8px', marginTop: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
-            <Chip label={closed ? "Closed" : "Open"} size="small" sx={{ backgroundColor: closed ? '#ef4444' : '#22c55e', color: 'white', fontWeight: 600, fontSize: '0.75rem' }} />
+            <Chip label={closed ? t('closed') : t('open')} size="small" sx={{ backgroundColor: closed ? '#ef4444' : '#22c55e', color: 'white', fontWeight: 600, fontSize: '0.75rem' }} />
             {occupancy !== null && occupancy !== undefined && !closed && (
-              <Chip label={`${occupancy}% full`} size="small" sx={{ backgroundColor: occupancy >= 80 ? '#ef4444' : occupancy >= 50 ? '#f59e0b' : '#22c55e', color: 'white', fontWeight: 600, fontSize: '0.75rem' }} />
+              <Chip label={tHome('occupancy', { percent: occupancy })} size="small" sx={{ backgroundColor: occupancy >= 80 ? '#ef4444' : occupancy >= 50 ? '#f59e0b' : '#22c55e', color: 'white', fontWeight: 600, fontSize: '0.75rem' }} />
             )}
             {seatCount !== undefined && seatCount > 0 && (
-              <Chip label={`${seatCount} ${seatCount === 1 ? 'seat' : 'seats'}`} size="small" sx={{ backgroundColor: '#3b82f6', color: 'white', fontWeight: 600, fontSize: '0.75rem' }} />
+              <Chip label={tHome('seatCount', { count: seatCount })} size="small" sx={{ backgroundColor: '#3b82f6', color: 'white', fontWeight: 600, fontSize: '0.75rem' }} />
             )}
           </div>
         </CardContent>

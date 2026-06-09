@@ -11,7 +11,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:i18n": "node tests/i18n-completeness.test.js"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -26,6 +27,7 @@
     "eslint-config-next": "13.4.5",
     "framer-motion": "^12.40.0",
     "next": "13.4.5",
+    "next-intl": "^3.26.5",
     "postcss": "8.4.24",
     "react": "18.2.0",
     "react-dom": "18.2.0",

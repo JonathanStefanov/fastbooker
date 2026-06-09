@@ -18,6 +18,8 @@ export interface University {
   shortName: string;
   searchQuery: string;
   emailDomain: string;
+  country?: string;
+  city?: string;
   colors: UniversityColors;
   libraryOverrides: Record<string, LibraryOverride>;
 }

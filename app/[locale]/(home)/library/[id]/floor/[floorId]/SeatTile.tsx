@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { useEmail } from '@/components/EmailContext';
 import Box from '@mui/material/Box';
 import ListItem from '@mui/material/ListItem';
@@ -34,6 +35,8 @@ export default function SeatTile({ name, description, hours, id, date }: SeatTil
   const [showSuccess, setShowSuccess] = useState(false);
   const [bookedRange, setBookedRange] = useState<{ start: string; end: string } | null>(null);
   const { email, requireEmail } = useEmail();
+
+  const t = useTranslations('seat');
 
   const availableHours = hours.filter(hour => hour.places_available > 0);
   const hasAvailableSlots = availableHours.length > 0;
@@ -143,13 +146,13 @@ export default function SeatTile({ name, description, hours, id, date }: SeatTil
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               {hasAvailableSlots ? (
                 <>
-                  <Chip label={`${availableHours.length} slot${availableHours.length !== 1 ? 's' : ''}`} size="small" sx={{ backgroundColor: '#22c55e', color: 'white', fontWeight: 600 }} />
+                  <Chip label={t('availableSlots', { count: availableHours.length })} size="small" sx={{ backgroundColor: '#22c55e', color: 'white', fontWeight: 600 }} />
                   <motion.div animate={{ rotate: expanded ? 180 : 0 }} transition={{ duration: 0.2 }}>
                     <IconButton size="small"><ExpandMoreIcon /></IconButton>
                   </motion.div>
                 </>
               ) : (
-                <Chip label="No available slots" size="small" sx={{ backgroundColor: '#ef4444', color: 'white', fontWeight: 600 }} />
+                <Chip label={t('noAvailableSlots')} size="small" sx={{ backgroundColor: '#ef4444', color: 'white', fontWeight: 600 }} />
               )}
             </Box>
           </Box>
@@ -165,16 +168,16 @@ export default function SeatTile({ name, description, hours, id, date }: SeatTil
                         <motion.div initial={{ opacity: 0, scale: 0.9, x: -10 }} animate={{ opacity: 1, scale: 1, x: 0 }} exit={{ opacity: 0, scale: 0.9, x: -10 }} transition={{ type: 'spring', stiffness: 300, damping: 25 }}>
                           <Button variant="contained" onClick={(e) => { e.stopPropagation(); handleBookSelected(); }} disabled={booking} sx={{ backgroundColor: '#1d4ed8', '&:hover': { backgroundColor: '#1e40af' } }}>
                             {booking ? (
-                              <motion.span animate={{ opacity: [1, 0.5, 1] }} transition={{ repeat: Infinity, duration: 1.2 }}>Booking...</motion.span>
+                              <motion.span animate={{ opacity: [1, 0.5, 1] }} transition={{ repeat: Infinity, duration: 1.2 }}>{t('booking')}</motion.span>
                             ) : (
-                              `Book ${selectedSlots.length} slot${selectedSlots.length !== 1 ? 's' : ''}`
+                              t('bookSlots', { count: selectedSlots.length })
                             )}
                           </Button>
                         </motion.div>
                       )}
                     </AnimatePresence>
                     <Button variant="outlined" color="primary" onClick={(e) => { e.stopPropagation(); handleBookAll(); }} disabled={booking}>
-                      Book All Available
+                      {t('bookAllAvailable')}
                     </Button>
                   </Box>
                   <AnimatePresence>
