@@ -68,8 +68,11 @@
     "changeUniversity": "Cambia università"
   },
   "email": {
+    "title": "Imposta la tua Email",
+    "description": "Inserisci la tua email universitaria per velocizzare la prenotazione",
     "label": "Email UniPD",
-    "invalidEmail": "Inserisci un indirizzo email UniPD valido"
+    "invalidEmail": "Inserisci un indirizzo email UniPD valido",
+    "save": "Salva"
   },
   "disclaimer": {
     "modalTitle": "⚠️ Avviso Importante",

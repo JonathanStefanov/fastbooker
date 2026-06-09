@@ -66,6 +66,7 @@ export default function UniversitySelectModal({ open, onClose }: Props) {
           <motion.div
             onClick={(e) => e.stopPropagation()}
             className="bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col"
+            data-testid="university-modal"
             style={{ maxWidth: '520px', width: '100%', maxHeight: '80vh' }}
             initial={{ scale: 0.85, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}

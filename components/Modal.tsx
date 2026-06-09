@@ -8,9 +8,10 @@ interface ModalProps {
   onClose: () => void;
   children: ReactNode;
   maxWidth?: string;
+  'data-testid'?: string;
 }
 
-export default function Modal({ open, onClose, children, maxWidth = '480px' }: ModalProps) {
+export default function Modal({ open, onClose, children, maxWidth = '480px', 'data-testid': dataTestId }: ModalProps) {
   return (
     <AnimatePresence>
       {open && (
@@ -25,6 +26,7 @@ export default function Modal({ open, onClose, children, maxWidth = '480px' }: M
           <motion.div
             onClick={(e) => e.stopPropagation()}
             className="bg-white rounded-2xl shadow-2xl overflow-hidden"
+            data-testid={dataTestId}
             style={{ maxWidth, width: '100%' }}
             initial={{ scale: 0.85, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
