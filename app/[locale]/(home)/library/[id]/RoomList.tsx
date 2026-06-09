@@ -6,6 +6,10 @@ import List from '@mui/material/List';
 import Paper from '@mui/material/Paper';
 import type { Floor } from '@/types';
 
+interface FloorWithSource extends Floor {
+  sourceLibraryId?: string;
+}
+
 const container = {
   hidden: { opacity: 0 },
   show: { opacity: 1, transition: { staggerChildren: 0.07 } },
@@ -17,7 +21,7 @@ const item = {
 } as const;
 
 interface RoomListProps {
-  floors: Floor[];
+  floors: FloorWithSource[];
   libraryId: string;
 }
 
@@ -28,7 +32,12 @@ export default function RoomList({ floors, libraryId }: RoomListProps) {
         <List sx={{ py: 0 }} component={motion.ul} variants={container} initial="hidden" animate="show">
           {floors.map((floor, i) => (
             <motion.div key={i} variants={item}>
-              <FloorTile name={floor.localized_description} image={floor.image} libraryId={libraryId} id={floor.resource_type} />
+              <FloorTile
+                name={floor.localized_description}
+                image={floor.image}
+                libraryId={floor.sourceLibraryId || libraryId}
+                id={floor.resource_type}
+              />
             </motion.div>
           ))}
         </List>
