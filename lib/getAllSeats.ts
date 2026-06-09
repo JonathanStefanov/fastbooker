@@ -1,12 +1,14 @@
 import getFloors from './getFloors';
+import type { FloorWithSource } from './getFloors';
 import getSeats from './getSeats';
 import type { Seat } from '@/types';
 
 export default async function getAllSeats(libraryId: string, date: string): Promise<Seat[]> {
-  const floors = await getFloors(libraryId);
+  const floors: FloorWithSource[] = await getFloors(libraryId);
   
   const seatsPromises = floors.map(async (floor) => {
-    const seats = await getSeats(libraryId, floor.resource_type, date);
+    const sourceId = floor.sourceLibraryId || libraryId;
+    const seats = await getSeats(sourceId, floor.resource_type, date);
     return seats.flat(1).map(seat => ({
       ...seat,
       floor_name: floor.localized_description,
