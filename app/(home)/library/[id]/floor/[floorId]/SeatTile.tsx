@@ -29,7 +29,7 @@ export default function SeatTile({ name, description, hours, id, date }: SeatTil
   const [isError, setIsError] = useState(false);
   const [message, setMessage] = useState('');
   const [expanded, setExpanded] = useState(false);
-  const [selectedRange, setSelectedRange] = useState<{ start: string; end: string } | null>(null);
+  const [selectedSlots, setSelectedSlots] = useState<string[]>([]);
   const [booking, setBooking] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [bookedRange, setBookedRange] = useState<{ start: string; end: string } | null>(null);
@@ -38,24 +38,64 @@ export default function SeatTile({ name, description, hours, id, date }: SeatTil
   const availableHours = hours.filter(hour => hour.places_available > 0);
   const hasAvailableSlots = availableHours.length > 0;
 
-  const handleRangeSelect = (startTime: string, endTime: string) => {
-    setSelectedRange({ start: startTime, end: endTime });
+  const handleSlotsSelect = (slots: string[]) => {
+    setSelectedSlots(slots);
+  };
+
+  const getContiguousRanges = (slots: string[]): { start: string; end: string }[] => {
+    if (slots.length === 0) return [];
+    const sorted = [...slots].sort((a, b) => {
+      const [ah, am] = a.split(':').map(Number);
+      const [bh, bm] = b.split(':').map(Number);
+      return (ah * 60 + am) - (bh * 60 + bm);
+    });
+    const ranges: { start: string; end: string }[] = [];
+    let rangeStart = sorted[0];
+    let rangeEnd = sorted[0];
+    for (let i = 1; i < sorted.length; i++) {
+      const [prevH, prevM] = rangeEnd.split(':').map(Number);
+      const expectedMin = prevH * 60 + prevM + 30;
+      const [curH, curM] = sorted[i].split(':').map(Number);
+      if (curH * 60 + curM === expectedMin) {
+        rangeEnd = sorted[i];
+      } else {
+        ranges.push({ start: rangeStart, end: rangeEnd });
+        rangeStart = sorted[i];
+        rangeEnd = sorted[i];
+      }
+    }
+    ranges.push({ start: rangeStart, end: rangeEnd });
+    return ranges;
   };
 
   const handleBookSelected = () => {
-    if (!requireEmail() || !selectedRange) return;
+    if (!requireEmail() || selectedSlots.length === 0) return;
     setBooking(true);
-    reserve(email, date, selectedRange.start, selectedRange.end, id).then((res) => {
-      const success = res[0] === 1;
-      setIsError(!success);
-      setMessage(res[1]);
-      setHasSubmitted(true);
-      setBooking(false);
-      if (success) {
-        setBookedRange({ start: selectedRange.start, end: selectedRange.end });
-        setShowSuccess(true);
-        setSelectedRange(null);
-      }
+    const ranges = getContiguousRanges(selectedSlots);
+    let completed = 0;
+    let lastResult: [number, string] = [0, ''];
+    ranges.forEach((range, index) => {
+      const endHour = range.end.split(':').map(Number);
+      const endMin = endHour[0] * 60 + endHour[1] + 30;
+      const endTime = `${Math.floor(endMin / 60).toString().padStart(2, '0')}:${(endMin % 60).toString().padStart(2, '0')}`;
+      setTimeout(() => {
+        reserve(email, date, range.start, endTime, id).then((res) => {
+          lastResult = res;
+          completed++;
+          if (completed === ranges.length) {
+            const success = lastResult[0] === 1;
+            setIsError(!success);
+            setMessage(lastResult[1]);
+            setHasSubmitted(true);
+            setBooking(false);
+            if (success) {
+              setBookedRange({ start: ranges[0].start, end: endTime });
+              setShowSuccess(true);
+              setSelectedSlots([]);
+            }
+          }
+        });
+      }, index * 1000);
     });
   };
 
@@ -118,16 +158,16 @@ export default function SeatTile({ name, description, hours, id, date }: SeatTil
             {expanded && hasAvailableSlots && (
               <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }} style={{ overflow: 'hidden' }}>
                 <Box sx={{ p: 2, pt: 0, borderTop: '1px solid #e5e7eb' }}>
-                  <Box sx={{ mt: 2, mb: 2 }}><TimeSlotBar hours={hours} onSelect={handleRangeSelect} /></Box>
+                  <Box sx={{ mt: 2, mb: 2 }}><TimeSlotBar hours={hours} onSelect={handleSlotsSelect} /></Box>
                   <Box sx={{ display: 'flex', gap: 1, mt: 2, flexWrap: 'wrap' }}>
                     <AnimatePresence>
-                      {selectedRange && (
+                      {selectedSlots.length > 0 && (
                         <motion.div initial={{ opacity: 0, scale: 0.9, x: -10 }} animate={{ opacity: 1, scale: 1, x: 0 }} exit={{ opacity: 0, scale: 0.9, x: -10 }} transition={{ type: 'spring', stiffness: 300, damping: 25 }}>
                           <Button variant="contained" onClick={(e) => { e.stopPropagation(); handleBookSelected(); }} disabled={booking} sx={{ backgroundColor: '#1d4ed8', '&:hover': { backgroundColor: '#1e40af' } }}>
                             {booking ? (
                               <motion.span animate={{ opacity: [1, 0.5, 1] }} transition={{ repeat: Infinity, duration: 1.2 }}>Booking...</motion.span>
                             ) : (
-                              `Book ${selectedRange.start} → ${selectedRange.end}`
+                              `Book ${selectedSlots.length} slot${selectedSlots.length !== 1 ? 's' : ''}`
                             )}
                           </Button>
                         </motion.div>
