@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import TimeSlotBar from '@/app/(home)/library/[id]/floor/[floorId]/TimeSlotBar';
+import TimeSlotBar from '@/app/[locale]/(home)/library/[id]/floor/[floorId]/TimeSlotBar';
 import type { TimeSlot } from '@/types';
 
 function makeSlots(hours: string[], available = true): TimeSlot[] {

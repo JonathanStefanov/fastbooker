@@ -25,14 +25,17 @@ export function UniversityProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const saved = localStorage.getItem('selectedUniversity');
-    if (saved && getUniversity(saved)) {
-      setUniversityId(saved);
-      setHasSelectedUniversity(true);
+    if (saved) {
+      const uni = getUniversity(saved);
+      // Only accept if the returned university matches the requested ID (not a fallback)
+      if (uni.id === saved) {
+        setUniversityId(saved);
+        setHasSelectedUniversity(true);
+      }
     }
     setHydrated(true);
   }, []);
 
-  // Auto-open university modal after disclaimer is accepted (first visit)
   useEffect(() => {
     if (!hydrated) return;
 
@@ -40,11 +43,9 @@ export function UniversityProvider({ children }: { children: ReactNode }) {
     const uniSaved = localStorage.getItem('selectedUniversity');
 
     if (disclaimerAccepted && !uniSaved) {
-      // Disclaimer was just accepted, no university saved → show picker
       setShowUniModal(true);
     }
 
-    // Listen for disclaimer acceptance event
     const handleDisclaimerAccepted = () => {
       if (!localStorage.getItem('selectedUniversity')) {
         setShowUniModal(true);
