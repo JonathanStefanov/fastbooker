@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { AFFLUENCES_RESERVATION_API } from './config';
 
 export default async function reserve(
   email: string,
@@ -7,7 +8,7 @@ export default async function reserve(
   end_time: string,
   id: string
 ): Promise<[number, string]> {
-  const url = 'https://reservation.affluences.com/api/reserve/' + id;
+  const url = `${AFFLUENCES_RESERVATION_API}/reserve/${id}`;
   const headers = {
     'Content-Type': 'application/json',
     'Accept': 'application/json, text/plain, */*',

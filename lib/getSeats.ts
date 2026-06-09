@@ -1,8 +1,9 @@
 import type { Seat } from '@/types';
+import { AFFLUENCES_RESERVATION_API } from './config';
 
 export default async function getSeats(library: string, id: string, date: string): Promise<Seat[]> {
   const response = await fetch(
-    'https://reservation.affluences.com/api/resources/' + library + '/available?date=' + date + '&type=' + id,
+    `${AFFLUENCES_RESERVATION_API}/resources/${library}/available?date=${date}&type=${id}`,
     { next: { revalidate: 120 } }
   );
   
