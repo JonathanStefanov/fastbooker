@@ -11,7 +11,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:i18n": "node tests/i18n-completeness.test.js"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
