@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations, useLocale } from 'next-intl';
+import { useTranslations } from 'next-intl';
 
 export default function Footer() {
   const t = useTranslations('footer');
@@ -10,7 +10,8 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 py-4">
         <div className="text-sm text-gray-600 text-center space-y-2">
           <p>
-            ⚠️ {t('disclaimer')}
+            ⚠️ <strong>{t('disclaimer').split(':')[0]}:</strong>{' '}
+            {t('disclaimer').split(': ').slice(1).join(': ')}
           </p>
           <p className="text-xs">
             <a href="/disclaimer" className="underline hover:text-gray-900 mr-4">{t('fullDisclaimer')}</a>
