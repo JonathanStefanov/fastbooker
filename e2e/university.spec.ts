@@ -7,7 +7,7 @@ test.describe('University Selection', () => {
     await page.reload();
 
     // Accept disclaimer
-    const acceptBtn = page.getByRole('button', { name: /accept|accetta|accepter/i });
+    const acceptBtn = page.getByRole('button', { name: /I Understand|Ho Capito|J'ai compris/i });
     await acceptBtn.click();
   });
 

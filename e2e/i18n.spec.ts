@@ -25,7 +25,6 @@ test.describe('Internationalization', () => {
 
     const disclaimerIt = page.locator('[data-testid="disclaimer-modal"]');
     if (await disclaimerIt.isVisible()) {
-      // Italian disclaimer should have Italian text
       await expect(disclaimerIt).toContainText(/FastBooker/i);
     }
 
