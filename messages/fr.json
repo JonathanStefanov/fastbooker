@@ -62,7 +62,8 @@
   },
   "filter": {
     "hideReserved": "Masquer les places réservées",
-    "hideNoVacancies": "Masquer les places sans créneaux"
+    "hideNoVacancies": "Masquer les places sans créneaux",
+    "favoritesOnly": "Favoris uniquement"
   },
   "date": {
     "today": "Aujourd'hui",

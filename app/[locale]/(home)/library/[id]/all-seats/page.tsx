@@ -14,6 +14,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { formatDate } from '@/lib/utils';
+import { useFavorites } from '@/hooks/useFavorites';
 import { searchMultiField } from '@/lib/fuzzySearch';
 import DateSelector from '../floor/[floorId]/DateSelector';
 import SeatTile from '../floor/[floorId]/SeatTile';
@@ -26,6 +27,8 @@ export default function AllSeats({ params }: { params: { id: string } }) {
   const [hideNoVacancies, setHideNoVacancies] = useState(false);
   const [sortBy, setSortBy] = useState<'number' | 'capacity'>('number');
   const [hideReserved, setHideReserved] = useState(true);
+  const [favoritesOnly, setFavoritesOnly] = useState(false);
+  const { isFavorite } = useFavorites();
 
   const t = useTranslations('allSeats');
   const tSort = useTranslations('sort');
@@ -46,6 +49,7 @@ export default function AllSeats({ params }: { params: { id: string } }) {
   const handleHideNoVacanciesChange = (event: React.ChangeEvent<HTMLInputElement>) => setHideNoVacancies(event.target.checked);
   const handleHideReservedChange = (event: React.ChangeEvent<HTMLInputElement>) => setHideReserved(event.target.checked);
   const handleSortChange = (_: React.MouseEvent<HTMLElement>, newSortBy: string | null) => { if (newSortBy !== null) setSortBy(newSortBy as 'number' | 'capacity'); };
+  const handleFavoritesOnlyChange = (event: React.ChangeEvent<HTMLInputElement>) => setFavoritesOnly(event.target.checked);
 
   const hasVacancies = (seat: Seat) => seat.hours?.some(hour => hour.places_available > 0);
   const isReserved = (seat: Seat) => seat.description?.toLowerCase().includes('riservato');
@@ -55,12 +59,19 @@ export default function AllSeats({ params }: { params: { id: string } }) {
     let filtered = seats
       .filter((seat: Seat) => searchMultiField(seat as unknown as Record<string, unknown>, ['resource_name', 'description', 'floor_name'], search))
       .filter((seat: Seat) => !hideNoVacancies || hasVacancies(seat))
-      .filter((seat: Seat) => !hideReserved || !isReserved(seat));
+      .filter((seat: Seat) => !hideReserved || !isReserved(seat))
+      .filter((seat: Seat) => !favoritesOnly || isFavorite(String(seat.resource_id)));
     if (sortBy === 'capacity') {
       filtered = filtered.sort((a: Seat, b: Seat) => b.hours.filter(h => h.places_available > 0).length - a.hours.filter(h => h.places_available > 0).length);
     } else {
       filtered = filtered.sort((a: Seat, b: Seat) => (a.resource_name ?? '').localeCompare(b.resource_name ?? '', undefined, { numeric: true }));
     }
+    // Favorites come first
+    filtered = filtered.sort((a: Seat, b: Seat) => {
+      const aFav = isFavorite(String(a.resource_id)) ? 0 : 1;
+      const bFav = isFavorite(String(b.resource_id)) ? 0 : 1;
+      return aFav - bFav;
+    });
     return filtered;
   };
 
@@ -88,6 +99,7 @@ export default function AllSeats({ params }: { params: { id: string } }) {
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
             <FormControlLabel control={<Switch checked={hideReserved} onChange={handleHideReservedChange} color="primary" />} label={tFilter('hideReserved')} />
             <FormControlLabel control={<Switch checked={hideNoVacancies} onChange={handleHideNoVacanciesChange} color="primary" />} label={tFilter('hideNoVacancies')} />
+            <FormControlLabel control={<Switch checked={favoritesOnly} onChange={handleFavoritesOnlyChange} color="primary" data-testid="favorites-only-toggle" />} label={tFilter('favoritesOnly')} />
           </Box>
         </Box>
         <div className="flex flex-col items-center">

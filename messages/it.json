@@ -56,7 +56,8 @@
   },
   "filter": {
     "hideReserved": "Nascondi posti riservati",
-    "hideNoVacancies": "Nascondi posti senza disponibilità"
+    "hideNoVacancies": "Nascondi posti senza disponibilità",
+    "favoritesOnly": "Solo preferiti"
   },
   "date": {
     "today": "Oggi"

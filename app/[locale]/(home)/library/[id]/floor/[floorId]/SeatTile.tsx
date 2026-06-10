@@ -13,6 +13,9 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
+import Favorite from '@mui/icons-material/Favorite';
+import { useFavorites } from '@/hooks/useFavorites';
 import TimeSlotBar from './TimeSlotBar';
 import BookingSuccessModal from '@/components/BookingSuccessModal';
 import type { TimeSlot } from '@/types';
@@ -36,6 +39,7 @@ export default function SeatTile({ name, description, hours, id, date }: SeatTil
   const [showSuccess, setShowSuccess] = useState(false);
   const [bookedRange, setBookedRange] = useState<{ start: string; end: string } | null>(null);
   const { email, requireEmail } = useEmail();
+  const { isFavorite, toggleFavorite } = useFavorites();
 
 
   const availableHours = hours.filter(hour => hour.places_available > 0);
@@ -134,7 +138,7 @@ export default function SeatTile({ name, description, hours, id, date }: SeatTil
   return (
     <>
       <motion.div layout whileHover={hasAvailableSlots ? { scale: 1.005 } : {}} transition={{ type: 'spring', stiffness: 400, damping: 30 }}>
-        <ListItem sx={{ flexDirection: 'column', alignItems: 'stretch', border: '1px solid #e5e7eb', borderRadius: '8px', mb: 2, p: 0, overflow: 'hidden', backgroundColor: hasAvailableSlots ? '#ffffff' : '#f9fafb' }}>
+        <ListItem data-testid={`seat-tile-${id}`} sx={{ flexDirection: 'column', alignItems: 'stretch', border: '1px solid #e5e7eb', borderRadius: '8px', mb: 2, p: 0, overflow: 'hidden', position: 'relative', backgroundColor: hasAvailableSlots ? '#ffffff' : '#f9fafb' }}>
           <Box
             sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 2, cursor: hasAvailableSlots ? 'pointer' : 'default', '&:hover': hasAvailableSlots ? { backgroundColor: '#f9fafb' } : {} }}
             onClick={() => hasAvailableSlots && setExpanded(!expanded)}
@@ -144,6 +148,14 @@ export default function SeatTile({ name, description, hours, id, date }: SeatTil
               {description && <Typography variant="body2" sx={{ color: '#6b7280' }}>{description}</Typography>}
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <IconButton
+                size="small"
+                data-testid={`favorite-btn-${id}`}
+                onClick={(e) => { e.stopPropagation(); toggleFavorite(id); }}
+                aria-label={isFavorite(id) ? 'Remove from favorites' : 'Add to favorites'}
+              >
+                {isFavorite(id) ? <Favorite sx={{ color: 'error.main' }} /> : <FavoriteBorder sx={{ color: 'action.active' }} />}
+              </IconButton>
               {hasAvailableSlots ? (
                 <>
                   <Chip label={t('availableSlots', { count: availableHours.length })} size="small" sx={{ backgroundColor: '#22c55e', color: 'white', fontWeight: 600 }} />
