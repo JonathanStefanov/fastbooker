@@ -184,6 +184,27 @@
       "noData": "Pas de données"
     }
   },
+  "occupancy": {
+    "pageTitle": "Taux d'occupation",
+    "pageSubtitle": "Occupation en temps réel et prévisions pour le reste de la journée",
+    "viewOccupancy": "Voir l'occupation",
+    "todayForecast": "Prévisions du jour",
+    "buildings": "Bâtiments",
+    "closed": "Fermé",
+    "noData": "Aucune donnée d'occupation disponible",
+    "status": {
+      "quiet": "Calme",
+      "moderate": "Modéré",
+      "busy": "Bondé"
+    },
+    "legend": {
+      "quiet": "Calme",
+      "light": "Léger",
+      "moderate": "Modéré",
+      "busy": "Bondé",
+      "full": "Très bondé"
+    }
+  },
   "universityModal": {
     "title": "Sélectionnez votre Université",
     "subtitle": "Choisissez votre établissement pour commencer",

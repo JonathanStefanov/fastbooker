@@ -6,10 +6,10 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import AvailabilityHeatmap from '@/components/AvailabilityHeatmap';
+import OccupancyHeatmap from '@/components/OccupancyHeatmap';
 
 export default function HeatmapPage({ params }: { params: { id: string } }) {
-  const t = useTranslations('heatmap');
+  const t = useTranslations('occupancy');
   const router = useRouter();
 
   return (
@@ -28,8 +28,8 @@ export default function HeatmapPage({ params }: { params: { id: string } }) {
           {t('pageSubtitle')}
         </Typography>
 
-        {/* Heatmap */}
-        <AvailabilityHeatmap libraryId={params.id} />
+        {/* Occupancy Heatmap */}
+        <OccupancyHeatmap libraryId={params.id} />
       </div>
     </div>
   );
