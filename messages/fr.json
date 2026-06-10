@@ -159,6 +159,14 @@
     "disclaimerTitle": "Mentions légales - UniPD Fast Booker",
     "disclaimerDescription": "Mentions légales et conditions d'utilisation de FastBooker"
   },
+  "quickRebook": {
+    "title": "Réservation rapide",
+    "bookAgain": "Réserver à nouveau",
+    "booking": "Réservation…",
+    "today": "Aujourd'hui",
+    "viewSeat": "Voir",
+    "bookingFailed": "Échec de la réservation. La place n'est peut-être plus disponible."
+  },
   "universityModal": {
     "title": "Sélectionnez votre Université",
     "subtitle": "Choisissez votre établissement pour commencer",

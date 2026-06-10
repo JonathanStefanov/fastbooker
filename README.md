@@ -24,6 +24,7 @@ FastBooker is a custom solution designed to enhance the seat booking experience 
 - ⏱️ **Multi-Slot Selection** — Tap to toggle, swipe to select ranges, auto-group contiguous slots
 - 👁️ **View All Seats** — See all available seats across all rooms in a single view
 - ⭐ **Favorite Seats** — Heart-icon to bookmark seats, favorites sorted to top, "Favorites only" filter toggle. Stored locally in browser.
+- 🔄 **Quick Rebook** — One-tap to re-book the same seat as your last session. Shows seat name, time, and date on a gradient card on the home page. Exam season lifesaver!
 - 📊 **Occupancy & Status** — Library open/closed status, occupancy percentage, and seat counts
 - 💾 **Persistent Settings** — University and email saved in browser storage
 
