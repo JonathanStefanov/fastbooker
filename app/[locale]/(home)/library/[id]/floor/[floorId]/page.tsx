@@ -115,6 +115,8 @@ export default function Floor({ params }: { params: { id: string; floorId: strin
                   hours={seat.hours}
                   id={String(seat.resource_id)}
                   date={selectedDate}
+                  libraryId={params.id}
+                  floorId={params.floorId}
                 />
               ))}
             </List>

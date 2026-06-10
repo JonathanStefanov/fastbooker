@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { useUniversity } from '@/components/UniversityContext';
 import LibraryTile from './LibraryTile';
+import QuickRebook from '@/components/QuickRebook';
 import CircularProgress from '@mui/material/CircularProgress';
 import type { Library } from '@/types';
 
@@ -66,6 +67,8 @@ export default function Home() {
       ) : isError ? (
         <div className="text-center mt-8"><p className="text-red-500 text-lg">{t('loadError')}</p></div>
       ) : libraries && libraries.length > 0 ? (
+        <>
+        <QuickRebook />
         <motion.div className="flex flex-wrap justify-center gap-6 max-w-7xl mx-auto" variants={container} initial="hidden" animate="show">
           {libraries
             .filter(lib => lib.booking_available !== false)
@@ -82,6 +85,7 @@ export default function Home() {
               </motion.div>
             ))}
         </motion.div>
+        </>
       ) : null}
     </main>
   );

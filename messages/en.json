@@ -150,6 +150,14 @@
     "disclaimerTitle": "Legal Disclaimer - UniPD Fast Booker",
     "disclaimerDescription": "Legal disclaimer and terms of use for FastBooker"
   },
+  "quickRebook": {
+    "title": "Quick Rebook",
+    "bookAgain": "Book again",
+    "booking": "Booking…",
+    "today": "Today",
+    "viewSeat": "View",
+    "bookingFailed": "Booking failed. The seat may no longer be available."
+  },
   "universityModal": {
     "title": "Select Your University",
     "subtitle": "Choose your institution to get started",

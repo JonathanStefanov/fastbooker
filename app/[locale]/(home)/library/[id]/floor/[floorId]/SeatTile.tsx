@@ -16,6 +16,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
 import { useFavorites } from '@/hooks/useFavorites';
+import { addBooking } from '@/lib/bookingHistory';
 import TimeSlotBar from './TimeSlotBar';
 import BookingSuccessModal from '@/components/BookingSuccessModal';
 import type { TimeSlot } from '@/types';
@@ -26,9 +27,11 @@ interface SeatTileProps {
   hours: TimeSlot[];
   id: string;
   date: string;
+  libraryId?: string;
+  floorId?: string;
 }
 
-export default function SeatTile({ name, description, hours, id, date }: SeatTileProps) {
+export default function SeatTile({ name, description, hours, id, date, libraryId, floorId }: SeatTileProps) {
   const t = useTranslations('seat');
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -99,6 +102,7 @@ export default function SeatTile({ name, description, hours, id, date }: SeatTil
               setBookedRange({ start: ranges[0].start, end: endTime });
               setShowSuccess(true);
               setSelectedSlots([]);
+              addBooking({ seatId: id, seatName: name, libraryId: libraryId || '', floorId: floorId || '', date, startTime: ranges[0].start, endTime, email });
             }
           }
         });
@@ -128,6 +132,7 @@ export default function SeatTile({ name, description, hours, id, date }: SeatTil
               const lastEnd = slots[slots.length - 1][1];
               setBookedRange({ start: firstStart, end: lastEnd });
               setShowSuccess(true);
+              addBooking({ seatId: id, seatName: name, libraryId: libraryId || '', floorId: floorId || '', date, startTime: firstStart, endTime: lastEnd, email });
             }
           }
         });
