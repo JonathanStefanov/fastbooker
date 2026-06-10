@@ -192,7 +192,7 @@ export default function OccupancyHeatmap({ libraryId }: OccupancyHeatmapProps) {
             {forecasts[hoveredSlot].hour}
           </Typography>
           <Typography variant="body2" sx={{ color: getOccupancyTextColor(forecasts[hoveredSlot].occupancy) }}>
-            {forecasts[hoveredSlot].occupancy}% {t('occupancy')}
+            {t('occupancyPercent', { pct: forecasts[hoveredSlot].occupancy })}
           </Typography>
         </Box>
       )}

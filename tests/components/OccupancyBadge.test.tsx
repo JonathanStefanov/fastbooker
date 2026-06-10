@@ -51,10 +51,10 @@ describe('OccupancyBadge', () => {
     });
   });
 
-  it('shows busy label for high occupancy', async () => {
+  it('shows moderate label for 75% occupancy', async () => {
     renderWithProviders(<OccupancyBadge libraryId="lib-1" />);
     await waitFor(() => {
-      expect(screen.getByText('Busy')).toBeInTheDocument();
+      expect(screen.getByText('Moderate')).toBeInTheDocument();
     });
   });
 
@@ -73,6 +73,24 @@ describe('OccupancyBadge', () => {
     renderWithProviders(<OccupancyBadge libraryId="lib-1" />);
     await waitFor(() => {
       expect(screen.getByText('Quiet')).toBeInTheDocument();
+    });
+  });
+
+  it('shows busy label for high occupancy', async () => {
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({
+        currentOccupancy: 85,
+        currentOpened: true,
+        forecasts: [],
+        buildings: [],
+        siteName: 'Test',
+      }),
+    });
+
+    renderWithProviders(<OccupancyBadge libraryId="lib-1" />);
+    await waitFor(() => {
+      expect(screen.getByText('Busy')).toBeInTheDocument();
     });
   });
 
