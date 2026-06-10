@@ -1,6 +1,3 @@
-import axios from 'axios';
-import { AFFLUENCES_RESERVATION_API } from './config';
-
 export default async function reserve(
   email: string,
   date: string,
@@ -8,30 +5,21 @@ export default async function reserve(
   end_time: string,
   id: string
 ): Promise<[number, string]> {
-  const url = `${AFFLUENCES_RESERVATION_API}/reserve/${id}`;
-  const headers = {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json, text/plain, */*',
-  };
-
-  const data = {
-    auth_type: null,
-    email,
-    date,
-    start_time,
-    end_time,
-    note: null,
-    user_firstname: null,
-    user_lastname: null,
-    user_phone: null,
-    person_count: 1,
-  };
-
-  return axios.post(url, data, { headers })
-    .then(response => {
-      return [1, response.data.successMessage] as [number, string];
-    })
-    .catch(error => {
-      return [0, error.response?.data?.errorMessage || 'Reservation failed'] as [number, string];
+  try {
+    const response = await fetch('/api/reserve', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ seatId: id, email, date, start_time, end_time }),
     });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return [0, data.error || 'Reservation failed'];
+    }
+
+    return [1, data.successMessage || 'Reservation successful!'];
+  } catch (error) {
+    return [0, 'Reservation failed'];
+  }
 }
