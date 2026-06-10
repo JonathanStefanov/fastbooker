@@ -59,15 +59,17 @@ test.describe('Availability Heatmap', () => {
 
   test('View Weekly Availability button visible on library page', async ({ page }) => {
     await page.goto('/it/library/lib-1');
-    const btn = page.getByRole('link', { name: /view weekly availability/i });
+    // Italian translation: "Vedi disponibilità settimanale"
+    const btn = page.getByRole('link', { name: /disponibilità settimanale/i });
     await expect(btn).toBeVisible();
   });
 
   test('button navigates to heatmap page', async ({ page }) => {
     await page.goto('/it/library/lib-1');
-    await page.getByRole('link', { name: /view weekly availability/i }).click();
+    await page.getByRole('link', { name: /disponibilità settimanale/i }).click();
     await expect(page).toHaveURL(/\/library\/lib-1\/heatmap/);
-    await expect(page.getByText(/weekly availability/i)).toBeVisible();
+    // Italian page title: "Disponibilità settimanale"
+    await expect(page.getByText(/disponibilità settimanale/i)).toBeVisible();
   });
 
   test('heatmap page shows day labels', async ({ page }) => {
@@ -87,10 +89,11 @@ test.describe('Availability Heatmap', () => {
 
   test('heatmap page shows legend', async ({ page }) => {
     await page.goto('/it/library/lib-1/heatmap');
-    await expect(page.getByText(/plenty/i)).toBeVisible();
-    await expect(page.getByText(/moderate/i)).toBeVisible();
-    await expect(page.getByText(/few seats/i)).toBeVisible();
-    await expect(page.getByText(/full/i)).toBeVisible();
+    // Italian legend: Molti, Moderato, Pochi posti, Pieno
+    await expect(page.getByText(/molti/i)).toBeVisible();
+    await expect(page.getByText(/moderato/i)).toBeVisible();
+    await expect(page.getByText(/pochi posti/i)).toBeVisible();
+    await expect(page.getByText(/pieno/i)).toBeVisible();
   });
 
   test('today is highlighted', async ({ page }) => {
@@ -123,9 +126,9 @@ test.describe('Availability Heatmap', () => {
     // Hover over a cell
     const cell = page.locator('[data-testid="heatmap-cell-2026-06-10-08:00"]');
     await cell.hover();
-    // Tooltip should show seat count
-    await expect(page.getByText(/seats available/i)).toBeVisible();
-    await expect(page.getByText(/click to see seats/i)).toBeVisible();
+    // Tooltip should show seat count (Italian: "posti disponibili")
+    await expect(page.getByText(/posti disponibili/i)).toBeVisible();
+    await expect(page.getByText(/clicca per vedere/i)).toBeVisible();
   });
 
   test('empty days are not shown in grid', async ({ page }) => {
