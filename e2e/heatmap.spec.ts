@@ -88,7 +88,7 @@ test.describe('Availability Heatmap', () => {
     await expect(page.getByText(/plenty/i)).toBeVisible();
     await expect(page.getByText(/moderate/i)).toBeVisible();
     await expect(page.getByText(/few seats/i)).toBeVisible();
-    await expect(page.getByText(/full/i)).toBeVisible();
+    await expect(page.getByText('Full (0%)').first()).toBeVisible();
   });
 
   test('today is highlighted', async ({ page }) => {
