@@ -11,13 +11,9 @@ vi.mock('next/navigation', () => ({
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => {
     const map: Record<string, string> = {
-      'title': "This Week's Availability",
-      'subtitle': 'See which days have the most free seats at a glance',
-      'pageTitle': 'Weekly Availability',
-      'pageSubtitle': 'Click any cell to see available seats for that day',
+      'noData': 'No availability data',
       'seatsAvailable': 'seats available',
       'clickToView': 'Click to see seats for this day',
-      'noData': 'No availability data',
       'legend.plenty': 'Plenty',
       'legend.moderate': 'Moderate',
       'legend.few': 'Few seats',
@@ -90,13 +86,25 @@ describe('AvailabilityHeatmap', () => {
     render(<AvailabilityHeatmap libraryId="test-lib" />, { wrapper: createWrapper() });
 
     await waitFor(() => {
-      expect(screen.getByText("This Week's Availability")).toBeTruthy();
+      expect(screen.getByText('Wed')).toBeTruthy();
     });
 
-    expect(screen.getByText('Wed')).toBeTruthy();
     expect(screen.getByText('Thu')).toBeTruthy();
     expect(screen.getByText('10')).toBeTruthy();
     expect(screen.getByText('11')).toBeTruthy();
+  });
+
+  it('renders time slot labels', async () => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockHeatmapData,
+    } as Response);
+
+    render(<AvailabilityHeatmap libraryId="test-lib" />, { wrapper: createWrapper() });
+
+    await waitFor(() => {
+      expect(screen.getByText('08:00')).toBeTruthy();
+    });
   });
 
   it('renders legend', async () => {
@@ -108,11 +116,11 @@ describe('AvailabilityHeatmap', () => {
     render(<AvailabilityHeatmap libraryId="test-lib" />, { wrapper: createWrapper() });
 
     await waitFor(() => {
-      expect(screen.getByText('Plenty')).toBeTruthy();
+      expect(screen.getByText(/Plenty/)).toBeTruthy();
     });
-    expect(screen.getByText('Moderate')).toBeTruthy();
-    expect(screen.getByText('Few seats')).toBeTruthy();
-    expect(screen.getByText('Full')).toBeTruthy();
+    expect(screen.getByText(/Moderate/)).toBeTruthy();
+    expect(screen.getByText(/Few seats/)).toBeTruthy();
+    expect(screen.getByText(/Full/)).toBeTruthy();
   });
 
   it('navigates to all-seats page on cell click', async () => {
@@ -124,15 +132,12 @@ describe('AvailabilityHeatmap', () => {
     render(<AvailabilityHeatmap libraryId="test-lib" />, { wrapper: createWrapper() });
 
     await waitFor(() => {
-      expect(screen.getByText("This Week's Availability")).toBeTruthy();
+      expect(screen.getByText('Wed')).toBeTruthy();
     });
 
-    // Find cells by their title attribute (they have day+hour info)
-    const cells = document.querySelectorAll('[title*="08:00"]');
-    if (cells.length > 0) {
-      fireEvent.click(cells[0]);
-      expect(mockPush).toHaveBeenCalledWith('/library/test-lib/all-seats?date=2026-06-10');
-    }
+    const cell = screen.getByTestId('heatmap-cell-2026-06-11-08:00');
+    fireEvent.click(cell);
+    expect(mockPush).toHaveBeenCalledWith('/library/test-lib/all-seats?date=2026-06-11');
   });
 
   it('shows no data message when empty', async () => {
