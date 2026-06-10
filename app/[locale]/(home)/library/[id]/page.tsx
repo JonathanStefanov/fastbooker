@@ -1,6 +1,7 @@
 import getFloors from '@/lib/getFloors';
 import ViewAllSeatsButton from './ViewAllSeatsButton';
 import RoomList from './RoomList';
+import AvailabilityHeatmap from '@/components/AvailabilityHeatmap';
 import { getTranslations } from 'next-intl/server';
 
 export default async function Home({ params }: { params: { id: string; locale: string } }) {
@@ -17,6 +18,9 @@ export default async function Home({ params }: { params: { id: string; locale: s
           </div>
           <ViewAllSeatsButton libraryId={params.id} />
         </div>
+      </div>
+      <div className="mb-8">
+        <AvailabilityHeatmap libraryId={params.id} />
       </div>
       <RoomList floors={floors} libraryId={params.id} />
     </main>
