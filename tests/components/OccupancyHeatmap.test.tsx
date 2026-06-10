@@ -75,7 +75,8 @@ describe('OccupancyHeatmap', () => {
   it('renders occupancy percentages', async () => {
     renderWithProviders(<OccupancyHeatmap libraryId="lib-1" />);
     await waitFor(() => {
-      expect(screen.getByText('60%')).toBeInTheDocument();
+      const sixtyPercent = screen.getAllByText('60%');
+      expect(sixtyPercent.length).toBeGreaterThanOrEqual(2);
       expect(screen.getByText('55%')).toBeInTheDocument();
       expect(screen.getByText('30%')).toBeInTheDocument();
     });
@@ -94,7 +95,7 @@ describe('OccupancyHeatmap', () => {
     await waitFor(() => {
       expect(screen.getByText(/quiet/i)).toBeInTheDocument();
       expect(screen.getByText(/moderate/i)).toBeInTheDocument();
-      expect(screen.getByText(/busy/i)).toBeInTheDocument();
+      expect(screen.getByText(/busy.*60.*80/i)).toBeInTheDocument();
     });
   });
 
