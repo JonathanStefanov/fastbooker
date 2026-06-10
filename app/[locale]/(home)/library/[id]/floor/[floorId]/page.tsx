@@ -91,8 +91,21 @@ export default function Floor({ params }: { params: { id: string; floorId: strin
         <div className="flex flex-col items-center">
           {isLoading ? (
             <div className="mt-8"><CircularProgress /></div>
-          ) : (
+          ) : filteredAndSortedSeats.length === 0 ? (
             <Box sx={{ textAlign: 'center', py: 4 }}><Typography variant="h6" sx={{ color: '#6b7280' }}>{tFloor('noResults')}</Typography></Box>
+          ) : (
+            <List sx={{ width: '100%', maxWidth: 600 }}>
+              {filteredAndSortedSeats.map((seat) => (
+                <SeatTile
+                  key={seat.id}
+                  name={seat.resource_name}
+                  description={seat.description}
+                  hours={seat.hours}
+                  id={seat.id}
+                  date={selectedDate}
+                />
+              ))}
+            </List>
           )}
         </div>
       </div>
