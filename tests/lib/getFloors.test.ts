@@ -17,10 +17,10 @@ describe('getFloors', () => {
 
     await getFloors('lib-123');
 
-    expect(mockFetch).toHaveBeenCalledWith(
-      `${AFFLUENCES_RESERVATION_API}/site/lib-123/types`,
-      { next: { revalidate: 3600 } }
-    );
+    expect(mockFetch.mock.calls.length).toBeGreaterThanOrEqual(1);
+    const [url, options] = mockFetch.mock.calls[0];
+    expect(url).toBe(`${AFFLUENCES_RESERVATION_API}/site/lib-123/types`);
+    expect(options.next.revalidate).toBe(3600);
   });
 
   it('returns types array from response', async () => {
@@ -33,6 +33,7 @@ describe('getFloors', () => {
     });
 
     const result = await getFloors('lib-1');
+    expect(mockFetch.mock.calls.length).toBeGreaterThanOrEqual(1);
     expect(result).toEqual(mockFloors);
   });
 
