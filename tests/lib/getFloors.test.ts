@@ -1,26 +1,28 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import getFloors from '@/lib/getFloors';
 import { AFFLUENCES_RESERVATION_API } from '@/lib/config';
 
-const mockFetch = vi.fn();
-vi.stubGlobal('fetch', mockFetch);
-
 describe('getFloors', () => {
+  let fetchSpy: ReturnType<typeof vi.spyOn>;
+
   beforeEach(() => {
-    mockFetch.mockReset();
+    fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+      json: () => Promise.resolve({ types: [] }),
+    } as Response);
+  });
+
+  afterEach(() => {
+    fetchSpy.mockRestore();
   });
 
   it('fetches from correct URL with library id', async () => {
-    mockFetch.mockResolvedValue({
-      json: () => Promise.resolve({ types: [] }),
-    });
-
     await getFloors('lib-123');
 
-    expect(mockFetch.mock.calls.length).toBeGreaterThanOrEqual(1);
-    const [url, options] = mockFetch.mock.calls[0];
-    expect(url).toBe(`${AFFLUENCES_RESERVATION_API}/site/lib-123/types`);
-    expect(options.next.revalidate).toBe(3600);
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+    expect(fetchSpy).toHaveBeenCalledWith(
+      `${AFFLUENCES_RESERVATION_API}/site/lib-123/types`,
+      { next: { revalidate: 3600 } }
+    );
   });
 
   it('returns types array from response', async () => {
@@ -28,35 +30,26 @@ describe('getFloors', () => {
       { resource_type: 'floor-1', localized_description: 'Ground Floor' },
       { resource_type: 'floor-2', localized_description: 'First Floor' },
     ];
-    mockFetch.mockResolvedValue({
+    fetchSpy.mockResolvedValue({
       json: () => Promise.resolve({ types: mockFloors }),
-    });
+    } as Response);
 
     const result = await getFloors('lib-1');
-    expect(mockFetch.mock.calls.length).toBeGreaterThanOrEqual(1);
     expect(result).toEqual(mockFloors);
   });
 
   it('uses AFFLUENCES_RESERVATION_API base URL', async () => {
-    mockFetch.mockResolvedValue({
-      json: () => Promise.resolve({ types: [] }),
-    });
-
     await getFloors('my-lib');
 
-    const calledUrl = mockFetch.mock.calls[0][0] as string;
+    const calledUrl = fetchSpy.mock.calls[0][0] as string;
     expect(calledUrl).toContain(AFFLUENCES_RESERVATION_API);
     expect(calledUrl).toContain('/site/my-lib/types');
   });
 
   it('uses 1 hour revalidation', async () => {
-    mockFetch.mockResolvedValue({
-      json: () => Promise.resolve({ types: [] }),
-    });
-
     await getFloors('lib');
 
-    const options = mockFetch.mock.calls[0][1];
+    const options = fetchSpy.mock.calls[0][1];
     expect(options.next.revalidate).toBe(3600);
   });
 });
