@@ -158,6 +158,23 @@
     "viewSeat": "View",
     "bookingFailed": "Booking failed. The seat may no longer be available."
   },
+  "heatmap": {
+    "title": "This Week's Availability",
+    "subtitle": "See which days have the most free seats at a glance",
+    "pageTitle": "Weekly Availability",
+    "pageSubtitle": "Click any cell to see available seats for that day",
+    "viewHeatmap": "View Weekly Availability",
+    "seatsAvailable": "seats available",
+    "clickToView": "Click to see seats for this day",
+    "noData": "No availability data for this week",
+    "legend": {
+      "plenty": "Plenty",
+      "moderate": "Moderate",
+      "few": "Few seats",
+      "full": "Full",
+      "noData": "No data"
+    }
+  },
   "universityModal": {
     "title": "Select Your University",
     "subtitle": "Choose your institution to get started",

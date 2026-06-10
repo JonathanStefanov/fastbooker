@@ -1,5 +1,6 @@
 import getFloors from '@/lib/getFloors';
 import ViewAllSeatsButton from './ViewAllSeatsButton';
+import ViewHeatmapButton from './ViewHeatmapButton';
 import RoomList from './RoomList';
 import { getTranslations } from 'next-intl/server';
 
@@ -16,6 +17,7 @@ export default async function Home({ params }: { params: { id: string; locale: s
             <p className="text-lg text-gray-600">{t('subtitle')}</p>
           </div>
           <ViewAllSeatsButton libraryId={params.id} />
+          <ViewHeatmapButton libraryId={params.id} />
         </div>
       </div>
       <RoomList floors={floors} libraryId={params.id} />

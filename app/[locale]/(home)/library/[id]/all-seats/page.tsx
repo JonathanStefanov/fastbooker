@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -22,7 +23,8 @@ import type { Seat } from '@/types';
 
 export default function AllSeats({ params }: { params: { id: string } }) {
 
-  const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
+  const searchParams = useSearchParams();
+  const [selectedDate, setSelectedDate] = useState(searchParams.get('date') || formatDate(new Date()));
   const [search, setSearch] = useState('');
   const [hideNoVacancies, setHideNoVacancies] = useState(false);
   const [sortBy, setSortBy] = useState<'number' | 'capacity'>('number');

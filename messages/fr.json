@@ -167,6 +167,23 @@
     "viewSeat": "Voir",
     "bookingFailed": "Échec de la réservation. La place n'est peut-être plus disponible."
   },
+  "heatmap": {
+    "title": "Disponibilités de la semaine",
+    "subtitle": "Voyez d'un coup d'œil quels jours ont le plus de places libres",
+    "pageTitle": "Disponibilités hebdomadaires",
+    "pageSubtitle": "Cliquez sur une cellule pour voir les places disponibles ce jour-là",
+    "viewHeatmap": "Voir les disponibilités de la semaine",
+    "seatsAvailable": "places disponibles",
+    "clickToView": "Cliquez pour voir les places de ce jour",
+    "noData": "Aucune donnée de disponibilité pour cette semaine",
+    "legend": {
+      "plenty": "Beaucoup",
+      "moderate": "Modéré",
+      "few": "Peu de places",
+      "full": "Complet",
+      "noData": "Pas de données"
+    }
+  },
   "universityModal": {
     "title": "Sélectionnez votre Université",
     "subtitle": "Choisissez votre établissement pour commencer",
