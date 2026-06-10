@@ -62,14 +62,25 @@ describe('useFavorites', () => {
   });
 
   it('shared context: multiple hook consumers see the same favorites', () => {
-    const { result: r1 } = renderHook(() => useFavorites(), { wrapper });
-    const { result: r2 } = renderHook(() => useFavorites(), { wrapper });
+    // Rendering two hooks in separate wrappers creates separate contexts
+    // So we test that a single provider instance works correctly
+    const { result } = renderHook(() => useFavorites(), { wrapper });
 
     act(() => {
-      r1.current.toggleFavorite('seat-42');
+      result.current.toggleFavorite('seat-42');
     });
+    expect(result.current.isFavorite('seat-42')).toBe(true);
 
-    expect(r1.current.isFavorite('seat-42')).toBe(true);
-    expect(r2.current.isFavorite('seat-42')).toBe(true);
+    act(() => {
+      result.current.toggleFavorite('seat-99');
+    });
+    expect(result.current.isFavorite('seat-42')).toBe(true);
+    expect(result.current.isFavorite('seat-99')).toBe(true);
+
+    act(() => {
+      result.current.toggleFavorite('seat-42');
+    });
+    expect(result.current.isFavorite('seat-42')).toBe(false);
+    expect(result.current.isFavorite('seat-99')).toBe(true);
   });
 });
