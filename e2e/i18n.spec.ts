@@ -3,7 +3,6 @@ import { test, expect } from '@playwright/test';
 test.describe('Internationalization', () => {
   test('root redirects to a supported locale', async ({ page }) => {
     await page.goto('/');
-    // Accept-Language on CI runners is en-US, so redirect may go to /en or /it
     await expect(page).toHaveURL(/\/(it|en|fr)/);
   });
 

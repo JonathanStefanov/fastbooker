@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Quick Rebook', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/it');
+    await page.goto('/en');
     await page.evaluate(() => {
       localStorage.clear();
       localStorage.setItem('disclaimer-accepted', 'true');
@@ -16,7 +16,6 @@ test.describe('Quick Rebook', () => {
   });
 
   test('shows quick rebook when booking history exists', async ({ page }) => {
-    // Seed booking history
     await page.evaluate(() => {
       localStorage.setItem('fastbooker-booking-history', JSON.stringify([{
         seatId: '12345',
@@ -32,8 +31,7 @@ test.describe('Quick Rebook', () => {
     });
     await page.reload();
 
-    // Quick rebook card should be visible
-    await expect(page.getByText('Prenota di nuovo')).toBeVisible(); // Italian title
+    await expect(page.getByText(/book again/i)).toBeVisible();
     await expect(page.getByText('E 1 01')).toBeVisible();
     await expect(page.getByText('09:00 → 12:00')).toBeVisible();
     await expect(page.locator('[data-testid="quick-rebook-btn"]')).toBeVisible();
@@ -56,7 +54,7 @@ test.describe('Quick Rebook', () => {
     }, today);
     await page.reload();
 
-    await expect(page.getByText('Oggi')).toBeVisible(); // Italian for "Today"
+    await expect(page.getByText(/today/i)).toBeVisible();
   });
 
   test('view seat button navigates to floor page', async ({ page }) => {
@@ -75,7 +73,7 @@ test.describe('Quick Rebook', () => {
     });
     await page.reload();
 
-    await page.getByRole('button', { name: 'Vedi' }).click();
+    await page.getByRole('button', { name: /view/i }).click();
     await expect(page).toHaveURL(/\/library\/lib-1\/floor\/floor-1/);
   });
 });

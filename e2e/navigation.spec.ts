@@ -3,7 +3,6 @@ import { mockLibraries, mockFloors, mockSeats } from './fixtures/mock-data';
 
 test.describe('Library Navigation', () => {
   test.beforeEach(async ({ page }) => {
-    // Intercept API calls
     await page.route('**/api/libraries**', async (route) => {
       await route.fulfill({
         status: 200,
@@ -12,8 +11,7 @@ test.describe('Library Navigation', () => {
       });
     });
 
-    // Set up: accept disclaimer + select university
-    await page.goto('/it');
+    await page.goto('/en');
     await page.evaluate(() => {
       localStorage.clear();
       localStorage.setItem('disclaimer-accepted', 'true');
@@ -23,14 +21,12 @@ test.describe('Library Navigation', () => {
   });
 
   test('homepage shows library list', async ({ page }) => {
-    // Wait for libraries to load
     await expect(page.getByText('Bibliothèque des Sciences')).toBeVisible({ timeout: 10000 });
     await expect(page.getByText('Bibliothèque de Philosophie')).toBeVisible();
     await expect(page.getByText('Bibliothèque Droit')).toBeVisible();
   });
 
   test('clicking library navigates to detail page', async ({ page }) => {
-    // Intercept floors API
     await page.route('**/api/**/floors**', async (route) => {
       await route.fulfill({
         status: 200,
@@ -41,8 +37,6 @@ test.describe('Library Navigation', () => {
 
     await expect(page.getByText('Bibliothèque des Sciences')).toBeVisible({ timeout: 10000 });
     await page.getByText('Bibliothèque des Sciences').click();
-
-    // Should navigate to library detail page
     await expect(page).toHaveURL(/\/library\/lib-1/);
   });
 
@@ -63,23 +57,21 @@ test.describe('Library Navigation', () => {
     await page.getByText('Bibliothèque des Sciences').click();
     await expect(page).toHaveURL(/\/library\/lib-1/);
 
-    // Go back
     await page.goBack();
-    await expect(page).toHaveURL(/\/it$/);
+    await expect(page).toHaveURL(/\/en$/);
   });
 });
 
 test.describe('Responsive Design', () => {
   test('mobile viewport renders correctly', async ({ page }) => {
-    await page.setViewportSize({ width: 375, height: 812 }); // iPhone size
-    await page.goto('/it');
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/en');
     await page.evaluate(() => {
       localStorage.setItem('disclaimer-accepted', 'true');
       localStorage.setItem('selectedUniversity', 'ulb');
     });
     await page.reload();
 
-    // Page should still render without horizontal overflow
     const body = page.locator('body');
     const box = await body.boundingBox();
     expect(box?.width).toBeLessThanOrEqual(375);
