@@ -1,26 +1,12 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import OccupancyBadge from '@/components/OccupancyBadge';
-import { http, HttpResponse } from 'msw';
-import { setupServer } from 'msw/node';
 import { NextIntlClientProvider } from 'next-intl';
 import en from '@/messages/en.json';
 
-const server = setupServer(
-  http.get('/api/occupancy', () => {
-    return HttpResponse.json({
-      currentOccupancy: 75,
-      currentOpened: true,
-      forecasts: [],
-      buildings: [],
-      siteName: 'ULB - BSH',
-    });
-  })
-);
-
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
+const mockFetch = vi.fn();
+vi.stubGlobal('fetch', mockFetch);
 
 function renderWithProviders(ui: React.ReactElement) {
   const queryClient = new QueryClient({
@@ -36,6 +22,23 @@ function renderWithProviders(ui: React.ReactElement) {
 }
 
 describe('OccupancyBadge', () => {
+  beforeEach(() => {
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({
+        currentOccupancy: 75,
+        currentOpened: true,
+        forecasts: [],
+        buildings: [],
+        siteName: 'ULB - BSH',
+      }),
+    });
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('shows loading state', () => {
     renderWithProviders(<OccupancyBadge libraryId="lib-1" />);
     expect(screen.getByRole('progressbar')).toBeInTheDocument();
@@ -48,25 +51,24 @@ describe('OccupancyBadge', () => {
     });
   });
 
-  it('shows busy label for high occupancy', async () => {
+  it('shows moderate label for 75% occupancy', async () => {
     renderWithProviders(<OccupancyBadge libraryId="lib-1" />);
     await waitFor(() => {
-      expect(screen.getByText('Busy')).toBeInTheDocument();
+      expect(screen.getByText('Moderate')).toBeInTheDocument();
     });
   });
 
   it('shows quiet label for low occupancy', async () => {
-    server.use(
-      http.get('/api/occupancy', () => {
-        return HttpResponse.json({
-          currentOccupancy: 15,
-          currentOpened: true,
-          forecasts: [],
-          buildings: [],
-          siteName: 'Test',
-        });
-      })
-    );
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({
+        currentOccupancy: 15,
+        currentOpened: true,
+        forecasts: [],
+        buildings: [],
+        siteName: 'Test',
+      }),
+    });
 
     renderWithProviders(<OccupancyBadge libraryId="lib-1" />);
     await waitFor(() => {
@@ -74,18 +76,53 @@ describe('OccupancyBadge', () => {
     });
   });
 
+  it('shows busy label for high occupancy', async () => {
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({
+        currentOccupancy: 85,
+        currentOpened: true,
+        forecasts: [],
+        buildings: [],
+        siteName: 'Test',
+      }),
+    });
+
+    renderWithProviders(<OccupancyBadge libraryId="lib-1" />);
+    await waitFor(() => {
+      expect(screen.getByText('Busy')).toBeInTheDocument();
+    });
+  });
+
+  it('shows moderate label for medium occupancy', async () => {
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({
+        currentOccupancy: 60,
+        currentOpened: true,
+        forecasts: [],
+        buildings: [],
+        siteName: 'Test',
+      }),
+    });
+
+    renderWithProviders(<OccupancyBadge libraryId="lib-1" />);
+    await waitFor(() => {
+      expect(screen.getByText('Moderate')).toBeInTheDocument();
+    });
+  });
+
   it('shows closed chip when not opened', async () => {
-    server.use(
-      http.get('/api/occupancy', () => {
-        return HttpResponse.json({
-          currentOccupancy: 50,
-          currentOpened: false,
-          forecasts: [],
-          buildings: [],
-          siteName: 'Test',
-        });
-      })
-    );
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({
+        currentOccupancy: 50,
+        currentOpened: false,
+        forecasts: [],
+        buildings: [],
+        siteName: 'Test',
+      }),
+    });
 
     renderWithProviders(<OccupancyBadge libraryId="lib-1" />);
     await waitFor(() => {
@@ -94,21 +131,37 @@ describe('OccupancyBadge', () => {
   });
 
   it('renders nothing when occupancy is null', async () => {
-    server.use(
-      http.get('/api/occupancy', () => {
-        return HttpResponse.json({
-          currentOccupancy: null,
-          currentOpened: false,
-          forecasts: [],
-          buildings: [],
-          siteName: 'Test',
-        });
-      })
-    );
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({
+        currentOccupancy: null,
+        currentOpened: false,
+        forecasts: [],
+        buildings: [],
+        siteName: 'Test',
+      }),
+    });
 
     const { container } = renderWithProviders(<OccupancyBadge libraryId="lib-1" />);
     await waitFor(() => {
-      expect(container.innerHTML).toBe('');
+      expect(container.querySelector('.MuiCircularProgress-root')).toBeNull();
+      expect(container.textContent).toBe('');
+    });
+  });
+
+  it('renders nothing on error', async () => {
+    mockFetch.mockResolvedValue({ ok: false, status: 500 });
+
+    const { container } = renderWithProviders(<OccupancyBadge libraryId="lib-1" />);
+    await waitFor(() => {
+      expect(container.textContent).toBe('');
+    });
+  });
+
+  it('fetches occupancy for correct library', async () => {
+    renderWithProviders(<OccupancyBadge libraryId="my-lib-123" />);
+    await waitFor(() => {
+      expect(mockFetch).toHaveBeenCalledWith('/api/occupancy?library=my-lib-123');
     });
   });
 });

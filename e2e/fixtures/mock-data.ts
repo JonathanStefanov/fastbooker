@@ -163,6 +163,24 @@ export const mockHeatmapData = [
   },
 ];
 
+export const mockOccupancyData = {
+  currentOccupancy: 65,
+  currentOpened: true,
+  siteName: 'Bibliothèque des Sciences',
+  forecasts: [
+    { hour: '16:30', occupancy: 60, opened: true },
+    { hour: '17:00', occupancy: 55, opened: true },
+    { hour: '17:30', occupancy: 50, opened: true },
+    { hour: '18:00', occupancy: 45, opened: true },
+    { hour: '18:30', occupancy: 35, opened: true },
+    { hour: '19:00', occupancy: 25, opened: true },
+  ],
+  buildings: [
+    { id: 'bld-1', name: 'Bâtiment GE', occupancy: 70, opened: true },
+    { id: 'bld-2', name: 'Bâtiment D', occupancy: 55, opened: true },
+  ],
+};
+
 export const mockSeatData = [
   {
     id: 'seat-1',

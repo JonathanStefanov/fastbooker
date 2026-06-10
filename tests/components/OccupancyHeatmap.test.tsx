@@ -1,10 +1,12 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import OccupancyHeatmap from '@/components/OccupancyHeatmap';
-import { http, HttpResponse } from 'msw';
-import { setupServer } from 'msw/node';
 import { NextIntlClientProvider } from 'next-intl';
 import en from '@/messages/en.json';
+
+const mockFetch = vi.fn();
+vi.stubGlobal('fetch', mockFetch);
 
 const mockOccupancyData = {
   currentOccupancy: 65,
@@ -24,16 +26,6 @@ const mockOccupancyData = {
   ],
 };
 
-const server = setupServer(
-  http.get('/api/occupancy', () => {
-    return HttpResponse.json(mockOccupancyData);
-  })
-);
-
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
-
 function renderWithProviders(ui: React.ReactElement) {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
@@ -48,6 +40,17 @@ function renderWithProviders(ui: React.ReactElement) {
 }
 
 describe('OccupancyHeatmap', () => {
+  beforeEach(() => {
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(mockOccupancyData),
+    });
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('shows loading state initially', () => {
     renderWithProviders(<OccupancyHeatmap libraryId="lib-1" />);
     expect(screen.getByRole('progressbar')).toBeInTheDocument();
@@ -72,7 +75,8 @@ describe('OccupancyHeatmap', () => {
   it('renders occupancy percentages', async () => {
     renderWithProviders(<OccupancyHeatmap libraryId="lib-1" />);
     await waitFor(() => {
-      expect(screen.getByText('60%')).toBeInTheDocument();
+      const sixtyPercent = screen.getAllByText('60%');
+      expect(sixtyPercent.length).toBeGreaterThanOrEqual(2);
       expect(screen.getByText('55%')).toBeInTheDocument();
       expect(screen.getByText('30%')).toBeInTheDocument();
     });
@@ -91,22 +95,21 @@ describe('OccupancyHeatmap', () => {
     await waitFor(() => {
       expect(screen.getByText(/quiet/i)).toBeInTheDocument();
       expect(screen.getByText(/moderate/i)).toBeInTheDocument();
-      expect(screen.getByText(/busy/i)).toBeInTheDocument();
+      expect(screen.getByText(/busy.*60.*80/i)).toBeInTheDocument();
     });
   });
 
   it('shows empty state when no data', async () => {
-    server.use(
-      http.get('/api/occupancy', () => {
-        return HttpResponse.json({
-          currentOccupancy: null,
-          currentOpened: false,
-          forecasts: [],
-          buildings: [],
-          siteName: 'Test',
-        });
-      })
-    );
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({
+        currentOccupancy: null,
+        currentOpened: false,
+        forecasts: [],
+        buildings: [],
+        siteName: 'Test',
+      }),
+    });
 
     renderWithProviders(<OccupancyHeatmap libraryId="lib-1" />);
     await waitFor(() => {
@@ -115,21 +118,55 @@ describe('OccupancyHeatmap', () => {
   });
 
   it('renders building closed chip', async () => {
-    server.use(
-      http.get('/api/occupancy', () => {
-        return HttpResponse.json({
-          ...mockOccupancyData,
-          buildings: [
-            { id: 'b1', name: 'Bâtiment GE', occupancy: null, opened: false },
-          ],
-        });
-      })
-    );
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({
+        ...mockOccupancyData,
+        buildings: [
+          { id: 'b1', name: 'Bâtiment GE', occupancy: null, opened: false },
+        ],
+      }),
+    });
 
     renderWithProviders(<OccupancyHeatmap libraryId="lib-1" />);
     await waitFor(() => {
       expect(screen.getByText('Bâtiment GE')).toBeInTheDocument();
       expect(screen.getByText('Closed')).toBeInTheDocument();
+    });
+  });
+
+  it('shows tooltip on bar hover', async () => {
+    renderWithProviders(<OccupancyHeatmap libraryId="lib-1" />);
+    await waitFor(() => {
+      expect(screen.getByText('16:30')).toBeInTheDocument();
+    });
+
+    const bar = screen.getByTestId('occupancy-bar-16:30');
+    fireEvent.mouseEnter(bar);
+
+    await waitFor(() => {
+      expect(screen.getByText(/60% occupancy/i)).toBeInTheDocument();
+    });
+  });
+
+  it('renders today forecast section header', async () => {
+    renderWithProviders(<OccupancyHeatmap libraryId="lib-1" />);
+    await waitFor(() => {
+      expect(screen.getByText(/today's forecast/i)).toBeInTheDocument();
+    });
+  });
+
+  it('renders buildings section header', async () => {
+    renderWithProviders(<OccupancyHeatmap libraryId="lib-1" />);
+    await waitFor(() => {
+      expect(screen.getByText(/buildings/i)).toBeInTheDocument();
+    });
+  });
+
+  it('fetches from correct API endpoint', async () => {
+    renderWithProviders(<OccupancyHeatmap libraryId="lib-42" />);
+    await waitFor(() => {
+      expect(mockFetch).toHaveBeenCalledWith('/api/occupancy?library=lib-42');
     });
   });
 });

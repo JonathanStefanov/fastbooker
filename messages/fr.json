@@ -192,6 +192,7 @@
     "buildings": "Bâtiments",
     "closed": "Fermé",
     "noData": "Aucune donnée d'occupation disponible",
+    "occupancyPercent": "{pct}% d'occupation",
     "status": {
       "quiet": "Calme",
       "moderate": "Modéré",

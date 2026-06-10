@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
-import { mockLibraries, mockFloors, mockHeatmapData } from './fixtures/mock-data';
+import { mockLibraries, mockFloors, mockOccupancyData } from './fixtures/mock-data';
 
-test.describe('Availability Heatmap', () => {
+test.describe('Occupancy Heatmap', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/en');
     await page.evaluate(() => {
@@ -29,80 +29,58 @@ test.describe('Availability Heatmap', () => {
       });
     });
 
-    // Mock heatmap API
-    await page.route('**/api/heatmap**', async (route) => {
+    // Mock occupancy API
+    await page.route('**/api/occupancy**', async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
-        body: JSON.stringify(mockHeatmapData),
-      });
-    });
-
-    // Mock seats API (for when clicking through to all-seats)
-    await page.route('**/api/seats**', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify([]),
-      });
-    });
-
-    // Mock all-seats API
-    await page.route('**/api/all-seats**', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify([]),
+        body: JSON.stringify(mockOccupancyData),
       });
     });
   });
 
-  test('View Weekly Availability button visible on library page', async ({ page }) => {
+  test('View Occupancy button visible on library page', async ({ page }) => {
     await page.goto('/en/library/lib-1');
-    const btn = page.getByRole('link', { name: /weekly availability/i });
+    const btn = page.getByRole('link', { name: /occupancy/i });
     await expect(btn).toBeVisible();
   });
 
-  test('button navigates to heatmap page', async ({ page }) => {
+  test('button navigates to occupancy page', async ({ page }) => {
     await page.goto('/en/library/lib-1');
-    await page.getByRole('link', { name: /weekly availability/i }).click();
+    await page.getByRole('link', { name: /occupancy/i }).click();
     await expect(page).toHaveURL(/\/library\/lib-1\/heatmap/);
-    await expect(page.getByText(/weekly availability/i)).toBeVisible();
+    await expect(page.getByText(/occupancy/i).first()).toBeVisible();
   });
 
-  test('heatmap page shows day labels', async ({ page }) => {
+  test('occupancy page shows site name', async ({ page }) => {
     await page.goto('/en/library/lib-1/heatmap');
-    await expect(page.getByText('Wed')).toBeVisible();
-    await expect(page.getByText('Thu')).toBeVisible();
-    await expect(page.getByText('Fri')).toBeVisible();
-    await expect(page.getByText('Mon')).toBeVisible();
+    await expect(page.getByText('Bibliothèque des Sciences')).toBeVisible();
   });
 
-  test('heatmap page shows time slot labels', async ({ page }) => {
+  test('occupancy page shows forecast bars', async ({ page }) => {
     await page.goto('/en/library/lib-1/heatmap');
-    await expect(page.getByText('08:00')).toBeVisible();
+    await expect(page.getByText('16:30')).toBeVisible();
+    await expect(page.getByText('17:00')).toBeVisible();
+    await expect(page.getByText('19:00')).toBeVisible();
   });
 
-  test('heatmap page shows legend', async ({ page }) => {
+  test('occupancy page shows percentages', async ({ page }) => {
     await page.goto('/en/library/lib-1/heatmap');
-    await expect(page.getByText(/plenty/i)).toBeVisible();
-    await expect(page.getByText(/moderate/i)).toBeVisible();
-    await expect(page.getByText(/few seats/i)).toBeVisible();
-    await expect(page.getByText('Full (0%)').first()).toBeVisible();
+    await expect(page.getByText('60%').first()).toBeVisible();
+    await expect(page.getByText('55%').first()).toBeVisible();
+    await expect(page.getByText('25%')).toBeVisible();
   });
 
-  test('today is highlighted', async ({ page }) => {
+  test('occupancy page shows buildings', async ({ page }) => {
     await page.goto('/en/library/lib-1/heatmap');
-    const todayChip = page.locator('.MuiChip-root', { hasText: 'Wed' });
-    await expect(todayChip).toBeVisible();
+    await expect(page.getByText('Bâtiment GE')).toBeVisible();
+    await expect(page.getByText('Bâtiment D')).toBeVisible();
   });
 
-  test('clicking a cell navigates to all-seats with date', async ({ page }) => {
+  test('occupancy page shows legend', async ({ page }) => {
     await page.goto('/en/library/lib-1/heatmap');
-    await expect(page.getByText('Wed')).toBeVisible();
-    const cell = page.locator('[data-testid="heatmap-cell-2026-06-11-08:00"]');
-    await cell.click();
-    await expect(page).toHaveURL(/\/library\/lib-1\/all-seats\?date=2026-06-11/);
+    await expect(page.getByText(/quiet/i).first()).toBeVisible();
+    await expect(page.getByText(/moderate/i).first()).toBeVisible();
   });
 
   test('back button returns to library page', async ({ page }) => {
@@ -112,24 +90,11 @@ test.describe('Availability Heatmap', () => {
     await expect(page).toHaveURL(/\/library\/lib-1/);
   });
 
-  test('heatmap shows hover tooltip', async ({ page }) => {
+  test('hovering shows tooltip', async ({ page }) => {
     await page.goto('/en/library/lib-1/heatmap');
-    await expect(page.getByText('Wed')).toBeVisible();
-    const cell = page.locator('[data-testid="heatmap-cell-2026-06-10-08:00"]');
-    await cell.hover();
-    await expect(page.getByText(/10 \/ 20 seats available/i)).toBeVisible();
-  });
-
-  test('empty days are not shown in grid', async ({ page }) => {
-    await page.goto('/en/library/lib-1/heatmap');
-    await expect(page.getByText('Wed')).toBeVisible();
-    await expect(page.getByText('Thu')).toBeVisible();
-    await expect(page.getByText('Fri')).toBeVisible();
-    await expect(page.getByText('Mon')).toBeVisible();
-    await expect(page.getByText('Tue')).toBeVisible();
-    const dayChips = page.locator('.MuiChip-root');
-    const chipTexts = await dayChips.allTextContents();
-    expect(chipTexts).not.toContain('Sat');
-    expect(chipTexts).not.toContain('Sun');
+    await expect(page.getByText('16:30')).toBeVisible();
+    const bar = page.locator('[data-testid="occupancy-bar-16:30"]');
+    await bar.hover();
+    await expect(page.getByText(/60% occupancy/i)).toBeVisible();
   });
 });
