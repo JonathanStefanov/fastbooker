@@ -81,6 +81,88 @@ export const mockTimeslots = [
   { id: 'ts-3', start_time: '10:00', end_time: '11:00', status: 'available' },
 ];
 
+export const mockHeatmapData = [
+  {
+    date: '2026-06-10',
+    dayName: 'Wed',
+    dayNumber: 10,
+    isToday: true,
+    slots: [
+      { hour: '08:00', available: 10, total: 20 },
+      { hour: '08:30', available: 8, total: 20 },
+      { hour: '09:00', available: 3, total: 20 },
+      { hour: '09:30', available: 0, total: 20 },
+      { hour: '10:00', available: 12, total: 20 },
+    ],
+  },
+  {
+    date: '2026-06-11',
+    dayName: 'Thu',
+    dayNumber: 11,
+    isToday: false,
+    slots: [
+      { hour: '08:00', available: 15, total: 20 },
+      { hour: '08:30', available: 14, total: 20 },
+      { hour: '09:00', available: 10, total: 20 },
+      { hour: '09:30', available: 6, total: 20 },
+      { hour: '10:00', available: 2, total: 20 },
+    ],
+  },
+  {
+    date: '2026-06-12',
+    dayName: 'Fri',
+    dayNumber: 12,
+    isToday: false,
+    slots: [
+      { hour: '08:00', available: 0, total: 20 },
+      { hour: '08:30', available: 0, total: 20 },
+      { hour: '09:00', available: 0, total: 20 },
+      { hour: '09:30', available: 0, total: 20 },
+      { hour: '10:00', available: 0, total: 20 },
+    ],
+  },
+  {
+    date: '2026-06-13',
+    dayName: 'Sat',
+    dayNumber: 13,
+    isToday: false,
+    slots: [],
+  },
+  {
+    date: '2026-06-14',
+    dayName: 'Sun',
+    dayNumber: 14,
+    isToday: false,
+    slots: [],
+  },
+  {
+    date: '2026-06-15',
+    dayName: 'Mon',
+    dayNumber: 15,
+    isToday: false,
+    slots: [
+      { hour: '08:00', available: 20, total: 20 },
+      { hour: '08:30', available: 18, total: 20 },
+      { hour: '09:00', available: 15, total: 20 },
+      { hour: '09:30', available: 12, total: 20 },
+      { hour: '10:00', available: 8, total: 20 },
+    ],
+  },
+  {
+    date: '2026-06-16',
+    dayName: 'Tue',
+    dayNumber: 16,
+    isToday: false,
+    slots: [
+      { hour: '08:00', available: 5, total: 20 },
+      { hour: '08:30', available: 3, total: 20 },
+      { hour: '09:00', available: 1, total: 20 },
+      { hour: '09:30', available: 0, total: 20 },
+      { hour: '10:00', available: 0, total: 20 },
+    ],
+  },
+];
+
 export const mockSeatData = [
   {
     id: 'seat-1',
