@@ -175,6 +175,28 @@
       "noData": "No data"
     }
   },
+  "occupancy": {
+    "pageTitle": "Occupancy",
+    "pageSubtitle": "Real-time occupancy and forecast for the rest of today",
+    "viewOccupancy": "View Occupancy",
+    "todayForecast": "Today's Forecast",
+    "buildings": "Buildings",
+    "closed": "Closed",
+    "noData": "No occupancy data available",
+    "occupancyPercent": "{pct}% occupancy",
+    "status": {
+      "quiet": "Quiet",
+      "moderate": "Moderate",
+      "busy": "Busy"
+    },
+    "legend": {
+      "quiet": "Quiet",
+      "light": "Light",
+      "moderate": "Moderate",
+      "busy": "Busy",
+      "full": "Very busy"
+    }
+  },
   "universityModal": {
     "title": "Select Your University",
     "subtitle": "Choose your institution to get started",
