@@ -188,6 +188,7 @@ export default function AvailabilityHeatmap({ libraryId }: AvailabilityHeatmapPr
                     }}
                     onMouseEnter={() => setHoveredCell({ dayIdx, slotIdx })}
                     onMouseLeave={() => setHoveredCell(null)}
+                    data-testid={`heatmap-cell-${day.date}-${hour}`}
                   />
                 );
               })}
