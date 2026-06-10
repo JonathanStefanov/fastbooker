@@ -11,6 +11,7 @@ import { Analytics } from '@vercel/analytics/react';
 import QueryProvider from '@/components/QueryProvider';
 import { UniversityProvider } from '@/components/UniversityContext';
 import { EmailProvider } from '@/components/EmailContext';
+import { FavoritesProvider } from '@/hooks/useFavorites';
 import type { ReactNode } from 'react';
 
 const inter = Quicksand({ subsets: ['latin'], weight: ['400'] });
@@ -25,6 +26,7 @@ export default async function RootLayout({ children, params }: { children: React
         <QueryProvider>
           <UniversityProvider>
             <EmailProvider>
+              <FavoritesProvider>
               <NextIntlClientProvider messages={messages}>
                 <DisclaimerModal />
                 <EmailModal />
@@ -35,6 +37,7 @@ export default async function RootLayout({ children, params }: { children: React
                 </main>
                 <Footer />
               </NextIntlClientProvider>
+              </FavoritesProvider>
             </EmailProvider>
           </UniversityProvider>
         </QueryProvider>

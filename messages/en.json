@@ -56,7 +56,8 @@
   },
   "filter": {
     "hideReserved": "Hide reserved seats",
-    "hideNoVacancies": "Hide seats without vacancies"
+    "hideNoVacancies": "Hide seats without vacancies",
+    "favoritesOnly": "Favorites only"
   },
   "date": {
     "today": "Today"

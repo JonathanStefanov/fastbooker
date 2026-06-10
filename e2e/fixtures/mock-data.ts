@@ -80,3 +80,42 @@ export const mockTimeslots = [
   { id: 'ts-2', start_time: '09:00', end_time: '10:00', status: 'reserved' },
   { id: 'ts-3', start_time: '10:00', end_time: '11:00', status: 'available' },
 ];
+
+export const mockSeatData = [
+  {
+    id: 'seat-1',
+    resource_name: 'A1',
+    resource_id: 'res-1',
+    description: 'Seat A1',
+    hours: [
+      { hour: '08:00', places_available: 5, status: 'available' },
+      { hour: '08:30', places_available: 5, status: 'available' },
+      { hour: '09:00', places_available: 0, status: 'unavailable' },
+      { hour: '09:30', places_available: 5, status: 'available' },
+    ],
+  },
+  {
+    id: 'seat-2',
+    resource_name: 'A2',
+    resource_id: 'res-2',
+    description: 'Seat A2',
+    hours: [
+      { hour: '08:00', places_available: 5, status: 'available' },
+      { hour: '08:30', places_available: 5, status: 'available' },
+      { hour: '09:00', places_available: 5, status: 'available' },
+      { hour: '09:30', places_available: 5, status: 'available' },
+    ],
+  },
+  {
+    id: 'seat-3',
+    resource_name: 'B1',
+    resource_id: 'res-3',
+    description: 'Seat B1',
+    hours: [
+      { hour: '08:00', places_available: 0, status: 'unavailable' },
+      { hour: '08:30', places_available: 0, status: 'unavailable' },
+      { hour: '09:00', places_available: 5, status: 'available' },
+      { hour: '09:30', places_available: 5, status: 'available' },
+    ],
+  },
+];
